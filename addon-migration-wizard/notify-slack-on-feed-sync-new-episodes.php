@@ -1,4 +1,6 @@
+<?php
 // Notify production team on Slack when new episodes found during feed sync
+
 add_action(
     'benecaster_feed_sync_after',
     function ( int $show_id, array $created_ids, array $skipped ): void {
