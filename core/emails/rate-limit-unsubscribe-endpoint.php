@@ -1,4 +1,6 @@
+<?php
 // Rate-limit unsubscribe endpoint to prevent abuse
+
 add_filter(
     'benecaster_email_unsubscribe_allowed',
     function ( bool $allowed, ?int $user_id, int $show_id, string $type, string $token ): bool {
