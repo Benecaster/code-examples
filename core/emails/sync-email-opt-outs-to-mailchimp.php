@@ -1,4 +1,6 @@
+<?php
 // Sync email opt-outs to Mailchimp
+
 add_action( 'benecaster_email_unsubscribed', function ( int $user_id, int $show_id, string $type ): void {
     my_mailchimp_update_status( $user_id, 'unsubscribed' );
 }, 10, 3 );
