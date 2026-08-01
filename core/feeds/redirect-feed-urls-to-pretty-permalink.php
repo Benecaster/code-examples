@@ -1,4 +1,6 @@
+<?php
 // Redirect feed URLs to pretty permalink format
+
 // Switch from ?token= query-string format to /feed/{token} pretty permalink.
 // Add this to functions.php or a site-specific plugin.
 add_filter(
