@@ -1,4 +1,6 @@
+<?php
 // Add a Custom Section to the Subscriber Account Page
+
 add_action(
     'benecaster_after_account_qr_code',
     function ( int $show_id, int $user_id ): void {
