@@ -1,4 +1,6 @@
+<?php
 // Add a Custom Section to the Show Page
+
 add_action(
     'benecaster_after_show_episode_list',
     function ( int $show_id ): void {
