@@ -1,4 +1,6 @@
-// Inject Podcasting 2.0 episode tags from an add-on
+<?php
+// Inject Podcasting 2.0 Episode Tags from an Add-on
+
 add_filter( 'benecaster_feed_podcast_episode_tags', function ( array $tags, int $episode_id, int $show_id ): array {
     // Inject a soundbite from an external clipping service.
     $highlight = get_post_meta( $episode_id, '_my_addon_highlight', true );
