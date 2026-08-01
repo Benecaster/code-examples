@@ -1,4 +1,6 @@
+<?php
 // Add Podlove chapter markers to RSS
+
 add_filter(
     'benecaster_rss_extra_item_tags',
     function ( array $tags, int $episode_id, int $show_id ): array {
