@@ -1,4 +1,6 @@
+<?php
 // Map a custom episode type to a canonical iTunes type
+
 add_filter(
     'benecaster_episode_itunes_type',
     function ( string $itunes_type, string $custom_slug, int $episode_id, int $show_id ): string {
