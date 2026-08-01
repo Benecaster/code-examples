@@ -1,4 +1,6 @@
+<?php
 // Display subscriber feed URL on WooCommerce My Account page
+
 add_action( 'woocommerce_account_dashboard', function () {
     $user_id = get_current_user_id();
     if ( $user_id <= 0 ) {
