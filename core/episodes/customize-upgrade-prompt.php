@@ -1,4 +1,6 @@
+<?php
 // Customize the Upgrade Prompt for a Specific Show
+
 add_filter(
     'benecaster_upgrade_prompt_html',
     function ( string $html, int $episode_id, int $show_id, string $required_tier, string $user_tier ): string {
