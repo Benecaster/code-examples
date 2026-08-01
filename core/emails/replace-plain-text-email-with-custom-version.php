@@ -1,4 +1,6 @@
+<?php
 // Replace auto-generated plain text email with custom version
+
 add_filter(
     'benecaster_email_body_text',
     function ( string $text, string $type, array $context ): string {
