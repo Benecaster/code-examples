@@ -1,4 +1,6 @@
-// Add a custom section to the analytics digest email
+<?php
+// Add a Custom Section to the Analytics Digest
+
 add_filter(
     'benecaster_analytics_digest_data',
     function ( array $data, string $type, int $show_id, array $period ): array {
