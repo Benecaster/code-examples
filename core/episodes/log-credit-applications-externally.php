@@ -1,5 +1,5 @@
 <?php
-// Log credit applications to an external system.
+// Log credit applications to an external system
 
 /**
  * Post a Slack notification when a credit is applied to an episode.
