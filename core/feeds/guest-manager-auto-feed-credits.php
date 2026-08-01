@@ -1,4 +1,6 @@
+<?php
 // Auto-populate Feed Credits from Guest Manager
+
 add_filter(
     'benecaster_podcast2_episode_auto_feed_credits',
     function ( array $credits, int $episode_id, int $show_id ): array {
