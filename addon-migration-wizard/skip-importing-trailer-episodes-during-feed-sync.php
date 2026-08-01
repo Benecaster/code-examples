@@ -1,4 +1,6 @@
+<?php
 // Skip importing trailer episodes during feed sync
+
 add_filter(
     'benecaster_feed_sync_should_import',
     function ( bool $should_import, array $item, int $show_id ): bool {
