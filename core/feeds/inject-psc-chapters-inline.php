@@ -1,4 +1,6 @@
+<?php
 // Inject Podlove Simple Chapters inline into the feed
+
 add_filter( 'benecaster_psc_chapters', function ( array $chapters, int $episode_id ) {
     $raw = get_post_meta( $episode_id, '_my_psc_chapters', true );
     if ( ! $raw ) {
