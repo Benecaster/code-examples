@@ -1,4 +1,6 @@
+<?php
 // Add SendGrid category tracking to all emails
+
 add_filter(
     'benecaster_email_headers',
     function ( array $headers, string $type, string $to, array $context ): array {
