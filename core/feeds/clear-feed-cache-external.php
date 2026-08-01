@@ -1,4 +1,6 @@
+<?php
 // Trigger a Feed Cache Clear from External Code
+
 // From an mu-plugin — clear the cache after your custom bulk update.
 add_action( 'admin_notices', function (): void {
     if ( ! current_user_can( 'manage_options' ) || empty( $_GET['my_flush_feeds'] ) ) {
