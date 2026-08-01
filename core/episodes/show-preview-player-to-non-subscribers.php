@@ -1,4 +1,6 @@
+<?php
 // Show a 60-second preview player to non-subscribers
+
 // 1. Tell the template to render the accessible player for everyone.
 add_filter( 'benecaster_show_episode_player', function (
     bool    $show,
