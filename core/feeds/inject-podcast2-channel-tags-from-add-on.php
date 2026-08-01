@@ -1,4 +1,6 @@
-// Inject additional Podcasting 2.0 channel tags from an add-on
+<?php
+// Inject Additional Podcasting 2.0 Channel Tags from an Add-on
+
 add_filter( 'benecaster_feed_podcast_channel_tags', function ( array $tags, int $show_id ): array {
     // Add a podcast index ownership verification string.
     $tags['txt'][] = [
