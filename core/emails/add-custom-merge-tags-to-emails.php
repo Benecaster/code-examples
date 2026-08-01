@@ -1,4 +1,6 @@
+<?php
 // Add custom merge tags to all emails
+
 add_filter(
     'benecaster_email_merge_tags',
     function ( array $tags, string $type, int $user_id, int $show_id ): array {
