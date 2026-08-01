@@ -1,4 +1,6 @@
-// Customise [benecaster_current_tier] shortcode output
+<?php
+// Customise [benecaster_current_tier] output
+
 add_filter(
     'benecaster_current_tier_output',
     function ( string $output, int $show_id, ?string $tier_slug, ?\WP_User $user, array $atts ): string {
