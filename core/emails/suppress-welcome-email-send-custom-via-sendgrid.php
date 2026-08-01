@@ -1,4 +1,6 @@
+<?php
 // Suppress welcome email and send custom version via SendGrid
+
 add_filter(
     'benecaster_email_should_send',
     function ( bool $should, string $type, string $to, int $user_id, int $show_id ): bool {
