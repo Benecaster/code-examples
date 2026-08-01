@@ -1,4 +1,6 @@
+<?php
 // Route all enclosure URLs through Podtrac
+
 add_filter(
     'benecaster_feed_enclosure_url',
     function ( string $url, int $episode_id, int $show_id, ?string $tier_slug ): string {
