@@ -1,4 +1,6 @@
+<?php
 // Add a subscriber to Mailchimp without the built-in integration
+
 add_action(
     'benecaster_token_generated',
     function ( int $token_id, int $user_id, int $show_id, string $tier_slug ): void {
