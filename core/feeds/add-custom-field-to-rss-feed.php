@@ -1,4 +1,6 @@
+<?php
 // Add a custom field to the RSS feed
+
 add_filter(
     'benecaster_rss_extra_item_tags',
     function ( array $tags, int $episode_id, int $show_id ): array {
