@@ -1,5 +1,5 @@
 <?php
-// Auto-select a credit template based on episode type.
+// Auto-select a credit template based on episode type
 
 /**
  * Pre-select the guest interview credit template when the episode has a guest.
