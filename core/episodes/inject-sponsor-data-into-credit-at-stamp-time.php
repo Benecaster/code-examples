@@ -1,5 +1,5 @@
 <?php
-// Inject current sponsor promo code into the stamped credit.
+// Inject external sponsor data into a credit at stamp time
 
 /**
  * Inject current sponsor promo code into the stamped credit.
