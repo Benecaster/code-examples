@@ -1,4 +1,6 @@
+<?php
 // Parse custom RSS namespace and map to Benecaster custom field
+
 add_filter(
     'benecaster_feed_sync_import_data',
     function ( array $episode_data, array $item, int $show_id ): array {
