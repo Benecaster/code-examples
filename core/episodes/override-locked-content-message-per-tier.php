@@ -1,4 +1,6 @@
+<?php
 // Override locked content message per tier
+
 add_filter(
     'benecaster_locked_content_message',
     function ( string $html, int $episode_id, int $show_id, string $current_tier ): string {
