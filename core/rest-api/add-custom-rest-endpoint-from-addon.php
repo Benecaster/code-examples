@@ -1,4 +1,6 @@
+<?php
 // Add a custom REST endpoint from your add-on
+
 namespace MyAddon;
 
 class MyController extends \Benecaster\REST\RestController {
