@@ -1,4 +1,6 @@
+<?php
 // Auto-populate custom fields from imported RSS data
+
 add_action(
     'benecaster_episode_imported',
     function ( int $episode_id, int $show_id, array $source_item ): void {
