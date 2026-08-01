@@ -1,4 +1,6 @@
+<?php
 // Build a custom subscriber dashboard with template functions
+
 // Register a shortcode you can drop into any page: [my_subscriber_dashboard]
 add_shortcode( 'my_subscriber_dashboard', function (): string {
     $user_id = get_current_user_id();
