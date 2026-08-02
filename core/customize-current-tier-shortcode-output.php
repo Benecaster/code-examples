@@ -1,5 +1,5 @@
 <?php
-// Customise [benecaster_current_tier] output
+// Customize [benecaster_current_tier] output
 
 add_filter(
     'benecaster_current_tier_output',
