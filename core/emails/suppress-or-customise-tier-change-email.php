@@ -1,5 +1,5 @@
 <?php
-// Suppress or customise the built-in tier change email per tier pair
+// Suppress or customize the built-in tier change email per tier pair
 
 // Suppress the email when the subscriber moves to the free tier (downgrade only).
 add_filter( 'benecaster_email_should_send_tier_change', function ( bool $should_send, ?int $user_id, ?int $show_id ): bool {
