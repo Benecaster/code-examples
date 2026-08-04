@@ -1,5 +1,5 @@
 <?php
-// Add a custom section below the QR code on the subscriber account page
+// Add a Custom Section below the QR Code on the Subscriber Account Page
 
 add_action(
     'benecaster_after_account_qr_code',
