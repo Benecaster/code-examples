@@ -1,5 +1,5 @@
 <?php
-// Wire a Gravity Forms submission into Benecaster's admin bulk-enroll endpoint
+// Automatically enroll Gravity Forms submissions as Benecaster subscribers
 
 // Gravity Forms webhook Request Body (Select Fields):
 // {
