@@ -1,5 +1,5 @@
 <?php
-// React when an anonymous donor exercises right-to-erasure
+// Clean up external records when a donor requests data erasure
 
 add_action( 'benecaster_donor_data_erased', function ( string $email, int $deleted ): void {
     if ( $deleted > 0 ) {
