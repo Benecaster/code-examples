@@ -1,5 +1,5 @@
 <?php
-// Conditionally show or hide template parts based on a subscriber's buy-up ownership
+// Show or hide content based on whether a subscriber owns a buy-up
 
 // Inside a theme template part (e.g. episode/single.php override).
 if ( benecaster_user_has_buyup( 0, $transcripts_buyup_id, $show_id ) ) {
