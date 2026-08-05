@@ -1,5 +1,5 @@
 <?php
-// Inject markup or react to Stripe donation events
+// React to a completed donation — log it, send a follow-up, or update a list
 
 add_action( 'benecaster_before_donation_form', function ( int $show_id ): void {
     printf( '<p class="legal">%s</p>', esc_html__( 'Donations are non-refundable.', 'my-plugin' ) );
