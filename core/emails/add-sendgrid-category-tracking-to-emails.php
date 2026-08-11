@@ -1,5 +1,5 @@
 <?php
-// Add SendGrid category tracking to all emails (SMTP relay mode)
+// Add SendGrid category tracking to all emails
 
 add_filter(
     'benecaster_email_headers',
