@@ -1,5 +1,5 @@
 <?php
-// Override the mailing-list opt-in checkbox label on the donation form
+// Override the donation mailing-list opt-in checkbox label
 
 add_filter(
     'benecaster_donor_enrollment_label',
