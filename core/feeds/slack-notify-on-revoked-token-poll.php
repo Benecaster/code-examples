@@ -1,5 +1,5 @@
 <?php
-// Ping a Slack channel when a cancelled subscriber's app polls a revoked token.
+// Ping a Slack channel when a cancelled subscriber's app polls a revoked token
 
 add_action( 'benecaster_feed_request_dispatched', function ( array $ctx ): void {
     if ( 'revoked' !== $ctx['token_status'] ) {
