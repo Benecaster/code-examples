@@ -1,5 +1,5 @@
 <?php
-// Push donation-enrolled followers to an external newsletter platform
+// Push donation-enrolled followers to an external newsletter
 
 add_action( 'benecaster_donor_enrolled_as_follower', function ( int $user_id, int $show_id, string $donation_reference ): void {
     $user = get_userdata( $user_id );
