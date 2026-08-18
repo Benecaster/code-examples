@@ -1,5 +1,5 @@
 <?php
-// Enumerate WP user IDs eligible for a broadcast audience, with follower support
+// Enumerate WP User IDs Eligible for a Broadcast Audience, with Follower Support
 
 $repo  = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
 $ids   = $repo->find_audience_user_ids( $show_id, 'paying' );
