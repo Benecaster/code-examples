@@ -1,4 +1,6 @@
 <?php
+// Redirect grace-period feeds to a pause page
+
 // Redirect to a WordPress post explaining the pause. The post can be the
 // same for every show or resolved dynamically per show — the filter fires
 // with $show_id so a multi-show operator can branch on it.
