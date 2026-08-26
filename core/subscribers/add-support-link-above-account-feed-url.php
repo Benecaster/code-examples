@@ -7,7 +7,7 @@ add_action( 'benecaster_before_account_feed_url', function ( int $show_id, int $
         /* translators: %s: link to support page */
         esc_html__( 'Having trouble? %s', 'my-addon' ),
         '<a href="' . esc_url( get_permalink( get_page_by_path( 'support' ) ) ) . '">'
-        . esc_html__( 'Visit our support centre', 'my-addon' )
+        . esc_html__( 'Visit our support center', 'my-addon' )
         . '</a>'
     );
     echo '</p>';
