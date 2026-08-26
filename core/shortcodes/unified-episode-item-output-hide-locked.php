@@ -1,4 +1,6 @@
 <?php
+// Hide locked episodes from all listing shortcodes
+
 // Hide locked episodes from every Benecaster listing surface.
 //
 // Fires from [benecaster_episodes], [benecaster_latest_episode], and
