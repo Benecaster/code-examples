@@ -1,5 +1,5 @@
 <?php
-// Show-limit enforcement: site-wide wp-admin notice
+// Render a site-wide show-limit admin notice
 
 // On over-limit: stash the current state so admin_notices can render it.
 // Fires from the daily license cron, so we can't render directly — the
