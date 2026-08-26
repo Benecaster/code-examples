@@ -1,5 +1,5 @@
 <?php
-// Replace the built-in unsubscribe URL with a branded opt-out centre
+// Replace the built-in unsubscribe URL with a branded opt-out center
 
 add_filter( 'benecaster_email_merge_tags', function ( array $tags, string $type, ?int $user_id, ?int $show_id ): array {
     // Only override for broadcast emails — leave transactional emails using the default.
