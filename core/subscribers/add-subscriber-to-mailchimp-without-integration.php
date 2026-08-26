@@ -1,5 +1,5 @@
 <?php
-// Add a subscriber to Mailchimp without the built-in integration
+// Add a subscriber to Mailchimp without the Email Marketing Integrations add-on
 
 add_action(
     'benecaster_token_generated',
