@@ -1,5 +1,6 @@
 <?php
-// Highlight top supporters: prepend a badge to donor-wall cards at or above a threshold.
+// Highlight Top Supporters on the Donor Wall
+
 add_filter( 'benecaster_donor_wall_item', function ( string $html, object $donation, int $show_id ): string {
     $threshold = 100.00; // major-currency units — e.g. $100 USD, ¥100 JPY.
     $amount    = isset( $donation->amount ) ? (float) $donation->amount : 0.0;
