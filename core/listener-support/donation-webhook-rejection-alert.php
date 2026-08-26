@@ -1,5 +1,6 @@
 <?php
-// POST a Slack alert on donation webhook signature failure.
+// POST a Slack Alert on Donation Webhook Signature Failure
+
 add_action( 'benecaster_donation_webhook_rejected', function ( string $canonical_platform, string $raw_platform ): void {
     wp_remote_post( 'https://hooks.slack.com/services/T00/B00/xxx', [
         'timeout'  => 3,
