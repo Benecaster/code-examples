@@ -1,5 +1,5 @@
 <?php
-// Run post-setup initialisation when the wizard completes
+// Run post-setup initialization when the wizard completes
 
 add_action( 'benecaster_setup_wizard_completed', function ( int $show_id, string $bridge_slug ): void {
     if ( $show_id === 0 ) {
@@ -9,6 +9,6 @@ add_action( 'benecaster_setup_wizard_completed', function ( int $show_id, string
     update_post_meta( $show_id, '_my_addon_setting', 'default_value' );
 
     if ( 'memberpress' === $bridge_slug ) {
-        // MemberPress-specific initialisation.
+        // MemberPress-specific initialization.
     }
 }, 10, 2 );
