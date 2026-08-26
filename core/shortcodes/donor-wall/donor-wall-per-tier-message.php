@@ -1,5 +1,6 @@
 <?php
-// Append a tier-appropriate thank-you message to each donor-wall card.
+// Append a Tier-Appropriate Thank-You Message to Each Donor Card
+
 add_filter( 'benecaster_donor_wall_item', function ( string $html, object $donation, int $show_id ): string {
     $amount = isset( $donation->amount ) ? (float) $donation->amount : 0.0;
     if ( $amount <= 0 ) {
