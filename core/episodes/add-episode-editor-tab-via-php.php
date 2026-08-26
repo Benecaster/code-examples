@@ -1,5 +1,5 @@
 <?php
-// Add a tab to the episode editor via PHP filter (Tier 1)
+// Add a tab to the episode editor via PHP filter
 
 add_filter( 'benecaster_episode_editor_tabs', function ( array $tabs ): array {
     $tabs[] = [
