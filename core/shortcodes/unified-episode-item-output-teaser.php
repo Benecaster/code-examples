@@ -1,4 +1,6 @@
 <?php
+// Show a teaser card for locked episodes
+
 // Replace locked-episode markup with a "first 40 words + subscribe CTA" teaser card.
 //
 // Fires from all three episode-listing shortcodes — one callback covers
