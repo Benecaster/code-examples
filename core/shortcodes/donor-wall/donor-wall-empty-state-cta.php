@@ -1,5 +1,6 @@
 <?php
-// Replace the default empty state with a custom call-to-action linking to checkout.
+// Custom Empty State CTA on the Donor Wall
+
 add_filter( 'benecaster_donor_wall_empty_message', function ( string $html, int $show_id ): string {
     $checkout_url = home_url( '/support-the-show/' );
 
