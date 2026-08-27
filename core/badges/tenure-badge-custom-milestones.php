@@ -1,5 +1,5 @@
 <?php
-// Redefine tenure badge milestones with custom thresholds and labels
+// Customize tenure badges end to end — thresholds, labels, and chip markup
 
 // Quarterly recognition — thresholds at 3 / 6 / 9 / 12 / 24 months, with
 // labels that read as anniversaries rather than "N-Month Member" progression.
@@ -26,3 +26,15 @@ add_filter( 'benecaster_tenure_badge_label', function ( string $label, int $user
 	}
 	return $label;
 }, 10, 4 );
+
+// Stage 3: replace the chip markup. Fires only for `tenure_auto` rows, so
+// tier badges and manually-assigned badges keep their default rendering.
+// Here the chip becomes a link to a page explaining how tenure is counted.
+add_filter( 'benecaster_tenure_badge_output', function ( string $html, int $user_id, int $show_id ): string {
+	// $show_id is 0 on the site-wide account page (per-user mode).
+	return sprintf(
+		'<a href="%s" class="my-tenure-link">%s</a>',
+		esc_url( home_url( '/about-membership-tenure/' ) ),
+		$html
+	);
+}, 10, 3 );
