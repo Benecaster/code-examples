@@ -1,12 +1,14 @@
 <?php
 // Embed a show QR code on a marketing page
 
-// On single-show installs use the auto-resolver; on multi-show installs
-// pass the show ID explicitly (e.g. from a page custom field or the URL).
-$show_id = benecaster_get_sole_show_id(); // returns null when 0 or > 1 show exists
+// The show ID is the one thing this snippet needs from you. Every show
+// displays a click-to-copy #{id} chip in its admin header and on its card
+// in Benecaster → Shows. On a page template, read it from a custom field
+// or the URL rather than hard-coding it.
+$show_id = 12;
 
 if ( ! $show_id ) {
-    return; // No show resolved — bail silently.
+    return; // Nothing to render.
 }
 
 $qr_url    = rest_url( 'benecaster/v1/shows/' . (int) $show_id . '/qr.png' );
