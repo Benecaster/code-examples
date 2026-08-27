@@ -7,24 +7,38 @@ add_shortcode( 'my_subscriber_dashboard', function (): string {
     if ( 0 === $user_id ) {
         return '<p>' . esc_html__( 'Please log in to view your dashboard.', 'my-theme' ) . '</p>';
     }
-    global $wpdb;
-    $shows = $wpdb->get_col( $wpdb->prepare(
-        "SELECT DISTINCT show_id FROM {$wpdb->prefix}benecaster_tokens
-         WHERE user_id = %d AND status = 'active'",
-        $user_id
-    ) );
+
+    $shows = get_posts( [
+        'post_type'      => 'benecaster_show',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ] );
 
     ob_start();
-    foreach ( array_map( 'intval', (array) $shows ) as $show_id ) {
-        $feed_url        = benecaster_get_feed_url( $show_id, $user_id );
-        $subscriber_count = benecaster_get_subscriber_count( $show_id );
+
+    foreach ( $shows as $show_id ) {
+        $tier = benecaster_get_user_tier_for_show( $show_id, $user_id );
+
+        // Empty tier means no active subscription to this show — skip it.
+        if ( '' === $tier ) {
+            continue;
+        }
+
+        $feed_url = benecaster_get_feed_url( $user_id, $show_id );
+
         printf(
             '<article class="my-show-card"><h3>%s</h3><p>%s</p><code>%s</code></article>',
             esc_html( get_the_title( $show_id ) ),
-            esc_html( sprintf( _n( '%s subscriber', '%s subscribers', $subscriber_count, 'my-theme' ), number_format_i18n( $subscriber_count ) ) ),
-            esc_html( $feed_url )
+            esc_html( sprintf( __( 'Your plan: %s', 'my-theme' ), $tier ) ),
+            esc_html( (string) $feed_url )
         );
-        benecaster_get_template_part( 'account/qr-code', [ 'show_id' => $show_id, 'user_id' => $user_id ] );
+
+        benecaster_get_template_part(
+            'account/qr-code',
+            [ 'show_id' => $show_id, 'user_id' => $user_id ]
+        );
     }
+
     return (string) ob_get_clean();
 } );
