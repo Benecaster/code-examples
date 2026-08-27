@@ -18,7 +18,7 @@ add_action(
             $user->display_name,
             $show_name,
             home_url( '/podcast-account/' ),
-            home_url( '/docs/adding-your-feed-to-a-podcast-app/' )
+            home_url( '/docs/podcast-app-setup/' )
         );
 
         wp_mail( $user->user_email, $subject, $body );
