@@ -1,7 +1,5 @@
 <?php
-/**
- * Purchase a buy-up from custom code, safely.
- */
+// Purchase a buy-up from custom code, safely
 
 /**
  * Purchase a buy-up on behalf of the logged-in subscriber.
