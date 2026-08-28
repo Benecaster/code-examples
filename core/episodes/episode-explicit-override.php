@@ -1,7 +1,5 @@
 <?php
-/**
- * Resolve or write the episode-level Explicit override.
- */
+// Resolve or override an episode's Explicit flag
 
 use Benecaster\Episode\EpisodeMeta;
 use Benecaster\Show\ShowMeta;
