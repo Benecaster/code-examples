@@ -1,7 +1,5 @@
 <?php
-/**
- * Restyle or reword the front-end Explicit-content badge.
- */
+// Restyle or reword the Explicit badge
 
 // 1. Replace "Explicit" with a short "E" everywhere the badge renders.
 add_filter( 'benecaster_explicit_badge_label', function ( string $label, string $mode ): string {
