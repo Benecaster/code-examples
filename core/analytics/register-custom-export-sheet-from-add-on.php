@@ -29,31 +29,13 @@ add_action( 'benecaster_boot', function (): void {
 
     // 2. Supply rows at file-generation time.
     add_filter( 'benecaster_export_sheet_rows_analytics_daily_snapshots', function ( array $rows, array $context ): array {
-        global $wpdb;
-        $table  = $wpdb->prefix . 'benecaster_analytics_daily_snapshots';
-        $where  = [];
-        $params = [];
-
-        if ( ! empty( $context['date_start'] ) ) {
-            $where[]  = 'snapshot_date >= %s';
-            $params[] = $context['date_start'];
-        }
-        if ( ! empty( $context['date_end'] ) ) {
-            $where[]  = 'snapshot_date <= %s';
-            $params[] = $context['date_end'];
-        }
-
-        $where_sql = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
-        $sql = "SELECT snapshot_date, tier_slug, subscriber_count, new_count, churn_count,
-                       total_feed_polls, unique_active_tokens
-                  FROM {$table}
-                  {$where_sql}
-                  ORDER BY snapshot_date ASC, tier_slug ASC";
-
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $results = $params
-            ? $wpdb->get_results( $wpdb->prepare( $sql, ...$params ), ARRAY_A )
-            : $wpdb->get_results( $sql, ARRAY_A );
+        // Rows come from storage your add-on owns, narrowed to the requested range and
+        // ordered by date then tier. Query only what you control — Benecaster's own
+        // storage is internal and can change in any release.
+        $results = my_addon_get_daily_snapshots(
+            $context['date_start'] ?? null,
+            $context['date_end'] ?? null
+        );
 
         foreach ( (array) $results as $row ) {
             $rows[] = [

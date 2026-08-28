@@ -7,13 +7,13 @@ add_filter( 'benecaster_field_value', function ( mixed $value, int $field_id, in
     }
 
     // Example: format date fields as localized date strings.
-    global $wpdb;
     static $type_cache = [];
-    if ( ! isset( $type_cache[ $field_id ] ) ) {
-        $type_cache[ $field_id ] = $wpdb->get_var( $wpdb->prepare(
-            "SELECT field_type FROM {$wpdb->prefix}benecaster_fields WHERE id = %d LIMIT 1",
-            $field_id
-        ) );
+    if ( ! array_key_exists( $field_id, $type_cache ) ) {
+        $definition = $GLOBALS['benecaster_container']
+            ->make( \Benecaster\Fields\FieldRegistry::class )
+            ->get_field( $field_id );
+
+        $type_cache[ $field_id ] = $definition['field_type'] ?? null;
     }
 
     if ( 'date' === $type_cache[ $field_id ] ) {

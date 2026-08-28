@@ -6,7 +6,7 @@ add_filter(
     function ( array $ids, string $term, int $show_id, array $tiers ): array {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'benecaster_transcripts';
+        $table = $wpdb->prefix . 'my_addon_transcripts';
         if ( ! $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
             return $ids;
         }

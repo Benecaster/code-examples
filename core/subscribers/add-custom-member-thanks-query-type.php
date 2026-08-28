@@ -24,10 +24,12 @@ class TopDonorsQuery implements \Benecaster\MemberThanks\BenecasterMemberThanksQ
         $count     = (int) ( $args['count'] ?? 5 );
         $tier_slug = $args['tier_slug'] ?? '';
 
+        // my_addon_donations is the add-on's own mirror of donation activity, written
+        // from benecaster_listener_support_donation_logged.
         $sql = $wpdb->prepare(
             "SELECT d.user_id, u.display_name, '' AS tier_slug, '' AS joined_at
-             FROM {$wpdb->prefix}benecaster_listener_support_donations d
-             JOIN {$wpdb->prefix}users u ON u.ID = d.user_id
+             FROM {$wpdb->prefix}my_addon_donations d
+             JOIN {$wpdb->users} u ON u.ID = d.user_id
              WHERE d.show_id = %d
                AND d.donated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
              GROUP BY d.user_id

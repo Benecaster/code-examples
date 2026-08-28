@@ -8,13 +8,16 @@ add_filter(
             return $data;
         }
         global $wpdb;
+
+        // my_addon_donations is the add-on's own mirror, written from
+        // benecaster_listener_support_donation_logged.
         $total = (float) $wpdb->get_var( $wpdb->prepare(
             "SELECT COALESCE( SUM( amount ), 0 )
-               FROM {$wpdb->prefix}benecaster_listener_support_donations
+               FROM {$wpdb->prefix}my_addon_donations
               WHERE show_id = %d AND donated_at BETWEEN %s AND %s",
             $show_id,
-            $period['start'],
-            $period['end']
+            $period['start'] . ' 00:00:00',
+            $period['end'] . ' 23:59:59'
         ) );
         $data['listener_support_totals'] = [
             'amount'   => $total,

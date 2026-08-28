@@ -20,12 +20,12 @@ add_filter( 'benecaster_broadcast_audience_user_ids', function (
     }
     $tier_slug = substr( $audience, 5 );
 
-    global $wpdb;
-    $rows = $wpdb->get_col( $wpdb->prepare(
-        "SELECT DISTINCT user_id FROM {$wpdb->prefix}benecaster_tokens
-         WHERE show_id = %d AND status = 'active' AND tier_slug = %s",
-        $show_id,
-        $tier_slug
+    // Start from the supported audience lookup, then narrow it to one tier.
+    $repo = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
+
+    return array_values( array_filter(
+        $repo->find_audience_user_ids( $show_id, 'all' ),
+        fn( int $user_id ): bool
+            => $tier_slug === benecaster_get_user_tier_for_show( $show_id, $user_id )
     ) );
-    return array_map( 'intval', (array) $rows );
 }, 10, 3 );
