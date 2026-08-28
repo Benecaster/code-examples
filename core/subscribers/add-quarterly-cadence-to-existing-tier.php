@@ -1,7 +1,5 @@
 <?php
-/**
- * Add a quarterly cadence Price to an existing membership tier.
- */
+// Add a quarterly cadence to an existing tier
 
 add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): void {
     // Resolve the tier by its stable slug — do not hardcode primary keys.
