@@ -1,14 +1,10 @@
 <?php
 // Redirect grace-period feeds to a pause page
 
-// Redirect to a WordPress post explaining the pause. The post can be the
-// same for every show or resolved dynamically per show — the filter fires
-// with $show_id so a multi-show operator can branch on it.
-add_filter( 'benecaster_grace_period_feed_fallback', function ( ?string $public_feed_url, int $show_id ): ?string {
-    // Optional: build a per-show URL if you host a status page per show.
-    // Falling back to the default public feed URL is fine when the show
-    // doesn't have a dedicated explainer — return $public_feed_url to
-    // preserve the built-in behavior for those shows.
+// Send subscribers of a paused show to an explainer page rather than
+// letting their podcast app report a bare error. Resolve it per show so a
+// multi-show operator can point each show somewhere different.
+add_filter( 'benecaster_grace_period_feed_fallback', function ( ?string $target, int $show_id ): ?string {
     $pause_page_id = (int) get_post_meta( $show_id, '_my_show_pause_page_id', true );
     if ( $pause_page_id > 0 ) {
         $url = get_permalink( $pause_page_id );
@@ -17,6 +13,7 @@ add_filter( 'benecaster_grace_period_feed_fallback', function ( ?string $public_
         }
     }
 
-    // No custom page configured — let the default public feed redirect happen.
-    return $public_feed_url;
+    // No explainer configured for this show — return the value you were
+    // given rather than inventing one, and the feed goes dark as designed.
+    return $target;
 }, 10, 2 );
