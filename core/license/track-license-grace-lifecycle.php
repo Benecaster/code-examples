@@ -2,29 +2,34 @@
 // Track the payment-failed license grace lifecycle
 
 add_action( 'benecaster_license_grace_started', function ( int $started_at, string $reason ): void {
-    // Payment just failed. Enqueue a "billing update needed" email to the
-    // site operator, or push an event to your monitoring pipeline.
-    wp_mail( get_option( 'admin_email' ), 'Benecaster: payment failed', sprintf(
-        'Your Benecaster subscription just failed a payment (%s). You have 30 days to update billing at benecaster.com before subscribers drop to the public feed.',
+    // Payment just failed — the 30-day window is open and subscribers are
+    // unaffected for now. Warn the operator while it is still cheap to fix.
+    $body = sprintf(
+        /* translators: %s: the /validate reason string. */
+        __( 'Your Benecaster subscription failed a payment (%s). Your subscribers are unaffected for the next 30 days. If billing is not updated by then, their private feeds stop serving entirely.', 'my-addon' ),
         $reason
-    ) );
+    );
+
+    wp_mail( get_option( 'admin_email' ), __( 'Benecaster: payment failed', 'my-addon' ), $body );
 }, 10, 2 );
 
-add_action( 'benecaster_license_grace_expired', function ( int $started_at ): void {
-    // 30 days elapsed — subscribers are now on the public feed. Fires
-    // once per cron cycle; guard with a wp_option if you only want the
-    // FIRST expiry to trigger an alert.
-    if ( ! get_option( 'my_addon_grace_expiry_alerted' ) ) {
-        update_option( 'my_addon_grace_expiry_alerted', 1 );
-        // ... send the "subscribers now on public feed" alert ...
-    }
-} );
+add_action( 'benecaster_license_payment_grace_hard_cutoff', function ( int $cutoff_at, int $token_count ): void {
+    // Day 30. $token_count tokens were just revoked and those feeds now
+    // return 403 — subscribers are NOT on the public feed. Fires once per
+    // grace cycle, so no de-duplication guard is needed.
+    my_addon_alert( 'license_hard_cutoff', [
+        'cutoff_at'     => $cutoff_at,
+        'feeds_stopped' => $token_count,
+    ] );
+}, 10, 2 );
 
-add_action( 'benecaster_license_grace_recovered', function ( int $started_at, int $duration_seconds ): void {
-    // Payment recovered. Clear any expiry-side state and, if grace ran
-    // long enough that expired fired, notify recovery.
-    delete_option( 'my_addon_grace_expiry_alerted' );
-    if ( $duration_seconds >= 30 * DAY_IN_SECONDS ) {
-        // ... send "your subscribers have their private feeds back" alert ...
-    }
+add_action( 'benecaster_license_payment_grace_recovered', function ( int $restored_count, int $started_at ): void {
+    // Billing fixed after a cutoff. Fires ONLY when tokens were actually
+    // revoked, so reaching this callback is itself the signal — no duration
+    // arithmetic. Restored subscribers keep their original feed URLs, so
+    // nobody has to re-add anything.
+    my_addon_alert( 'license_recovered', [
+        'feeds_restored' => $restored_count,
+        'outage_seconds' => time() - $started_at,
+    ] );
 }, 10, 2 );
