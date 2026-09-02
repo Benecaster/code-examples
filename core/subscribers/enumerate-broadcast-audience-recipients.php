@@ -1,31 +1,43 @@
 <?php
-// Enumerate WP User IDs Eligible for a Broadcast Audience, with Follower Support
+/**
+ * Enumerate WP User IDs Eligible for a Broadcast Audience
+ */
 
-$repo  = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
-$ids   = $repo->find_audience_user_ids( $show_id, 'paying' );
+$repo = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
 
-foreach ( $ids as $user_id ) {
+// Built-in audiences — including per-tier, which needs no callback.
+$paying = $repo->find_audience_user_ids( $show_id, 'paying' );
+$gold   = $repo->find_audience_user_ids( $show_id, 'tier:gold' );
+
+foreach ( $gold as $user_id ) {
     $user = get_userdata( $user_id );
     // Hand off to the email queue, an ESP API call, an export sheet, etc.
 }
 
-// Register a custom per-tier audience slug.
+// A genuinely custom audience: everyone who joined in the last 30 days.
 add_filter( 'benecaster_broadcast_audience_user_ids', function (
-    array $user_ids,
+    array  $user_ids,
     string $audience,
-    int $show_id
+    int    $show_id
 ): array {
-    if ( 0 !== strpos( $audience, 'tier:' ) ) {
+    // Guard first. Without this you rewrite every audience at once.
+    if ( 'joined-last-30-days' !== $audience ) {
         return $user_ids;
     }
-    $tier_slug = substr( $audience, 5 );
 
-    // Start from the supported audience lookup, then narrow it to one tier.
-    $repo = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
+    global $wpdb;
 
-    return array_values( array_filter(
-        $repo->find_audience_user_ids( $show_id, 'all' ),
-        fn( int $user_id ): bool
-            => $tier_slug === benecaster_get_user_tier_for_show( $show_id, $user_id )
+    // created_at is stored in the site's timezone, so build the cutoff in
+    // the same timezone rather than in UTC — an install in UTC+13 would
+    // otherwise silently move the window by half a day.
+    $cutoff = wp_date( 'Y-m-d H:i:s', time() - 30 * DAY_IN_SECONDS );
+
+    $rows = $wpdb->get_col( $wpdb->prepare(
+        "SELECT DISTINCT user_id FROM {$wpdb->prefix}benecaster_tokens
+         WHERE show_id = %d AND status = 'active' AND created_at >= %s",
+        $show_id,
+        $cutoff
     ) );
+
+    return array_map( 'intval', (array) $rows );
 }, 10, 3 );
