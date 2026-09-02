@@ -3,11 +3,9 @@
  * Enumerate WP User IDs Eligible for a Broadcast Audience
  */
 
-$repo = \Benecaster\Plugin::instance()->make( \Benecaster\Token\TokenRepository::class );
-
 // Built-in audiences — including per-tier, which needs no callback.
-$paying = $repo->find_audience_user_ids( $show_id, 'paying' );
-$gold   = $repo->find_audience_user_ids( $show_id, 'tier:gold' );
+$paying = benecaster_find_audience_user_ids( $show_id, 'paying' );
+$gold   = benecaster_find_audience_user_ids( $show_id, 'tier:gold' );
 
 foreach ( $gold as $user_id ) {
     $user = get_userdata( $user_id );
