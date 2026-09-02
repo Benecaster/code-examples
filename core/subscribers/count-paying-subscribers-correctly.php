@@ -1,21 +1,37 @@
 <?php
-// Count paying subscribers correctly
-//
-// benecaster_get_subscriber_count() returns every active token for the show —
-// paying subscribers, free-tier bridge members and followers together. It is
-// useful as an audience size and wrong as a paying count. A documented
-// paying-only helper is not public yet.
+/**
+ * Which subscriber count is the paying one
+ */
 
-$all_tokens = benecaster_get_subscriber_count( $show_id );
+// Almost always: the public helpers. Both exclusions applied for you.
+$count      = benecaster_count_paying_subscribers( $show_id );
+$site_count = benecaster_count_paying_subscribers_site_wide();
 
-// Site-wide, same caveat.
-$site_tokens = 0;
+// For contrast — every active token, followers and free-tier members
+// included. An audience size, not a paying count.
+$audience = benecaster_get_subscriber_count( $show_id );
 
-foreach ( get_posts( [
-    'post_type'      => 'benecaster_show',
-    'post_status'    => 'publish',
-    'posts_per_page' => -1,
-    'fields'         => 'ids',
-] ) as $id ) {
-    $site_tokens += benecaster_get_subscriber_count( $id );
-}
+// Only when WordPress is not loaded at all: a SQL client, a reporting
+// tool, a migration script that never boots WP. Note BOTH conditions.
+global $wpdb;
+
+$tokens   = $wpdb->prefix . 'benecaster_tokens';
+$tier_map = $wpdb->prefix . 'benecaster_tier_map';
+
+$count = (int) $wpdb->get_var( $wpdb->prepare(
+    "SELECT COUNT(*) FROM {$tokens} t
+     INNER JOIN {$tier_map} tm
+         ON tm.show_id = t.show_id AND tm.internal_tier_slug = t.tier_slug
+     WHERE t.show_id = %d AND t.status = 'active'
+       AND t.token_type = 'subscriber' AND tm.is_free_tier = 0",
+    $show_id
+) );
+
+// Same pattern, site-wide — the figure behind the daily licence report.
+$site_count = (int) $wpdb->get_var(
+    "SELECT COUNT(*) FROM {$tokens} t
+     INNER JOIN {$tier_map} tm
+         ON tm.show_id = t.show_id AND tm.internal_tier_slug = t.tier_slug
+     WHERE t.status = 'active'
+       AND t.token_type = 'subscriber' AND tm.is_free_tier = 0"
+);
