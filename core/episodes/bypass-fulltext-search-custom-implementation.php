@@ -4,7 +4,7 @@
 add_filter(
     'benecaster_search_pre_results',
     function ( ?array $pre, string $q, int $show_id, array $tiers, int $page, int $per_page ): ?array {
-        // Return null to let core handle it.
+        // Return null to let Benecaster handle it.
         if ( ! my_addon_is_active() ) {
             return null;
         }
