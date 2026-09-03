@@ -1,7 +1,5 @@
 <?php
-/**
- * Stop a third-party payment gateway charging real customers from a staging clone
- */
+// Stop a third-party payment gateway charging real customers from a staging clone
 
 use Benecaster\Payment\NonProductionChargeBlocked;
 use Benecaster\Payment\OutboundChargeGuard;
