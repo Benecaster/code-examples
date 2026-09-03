@@ -14,4 +14,4 @@ add_filter( 'benecaster_email_merge_tags', function ( array $tags, string $type,
         ], 'https://example.com/email-preferences/' );
     }
     return $tags;
-}, 20, 4 ); // priority 20 runs after core's inject_unsubscribe_url at priority 10
+}, 20, 4 ); // priority 20 runs after Benecaster's inject_unsubscribe_url at priority 10
