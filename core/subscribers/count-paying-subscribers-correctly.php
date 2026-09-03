@@ -1,7 +1,5 @@
 <?php
-/**
- * Which subscriber count is the paying one
- */
+// Which subscriber count is the paying one
 
 // Almost always: the public helpers. Both exclusions applied for you.
 $count      = benecaster_count_paying_subscribers( $show_id );
