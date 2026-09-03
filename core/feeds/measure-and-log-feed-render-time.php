@@ -1,13 +1,40 @@
 <?php
 // Measure and log feed render time
 
-add_action( 'benecaster_feed_before_render', function ( int $show_id, string $tier_slug ) {
-    $GLOBALS['_benecaster_render_start'] = microtime( true );
-}, 10, 2 );
+add_action(
+    'benecaster_feed_before_render',
+    function ( int $show_id, string $tier_slug ): void {
+        $GLOBALS['my_feed_render_start'] = microtime( true );
+    },
+    10,
+    2
+);
 
-add_action( 'benecaster_feed_after_render', function ( int $show_id, string $tier_slug, string $xml ) {
-    $elapsed_ms = round( ( microtime( true ) - ( $GLOBALS['_benecaster_render_start'] ?? 0 ) ) * 1000 );
-    $size_kb    = round( strlen( $xml ) / 1024, 1 );
-    error_log( sprintf( 'Benecaster feed rendered: show=%d tier=%s time=%dms size=%skb',
-        $show_id, $tier_slug, $elapsed_ms, $size_kb ) );
-}, 10, 3 );
+add_action(
+    'benecaster_feed_after_render',
+    function ( int $show_id, string $tier_slug, string $xml ): void {
+        if ( empty( $GLOBALS['my_feed_render_start'] ) ) {
+            return;
+        }
+
+        $ms = ( microtime( true ) - $GLOBALS['my_feed_render_start'] ) * 1000;
+        unset( $GLOBALS['my_feed_render_start'] );
+
+        // Only record the slow ones - feeds are polled far too often to log every request.
+        if ( $ms < 250 ) {
+            return;
+        }
+
+        error_log(
+            sprintf(
+                '[benecaster] slow feed render: show=%d tier=%s %.1fms %dKB',
+                $show_id,
+                $tier_slug !== '' ? $tier_slug : 'public',
+                $ms,
+                (int) ( strlen( $xml ) / 1024 )
+            )
+        );
+    },
+    10,
+    3
+);
