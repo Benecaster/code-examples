@@ -1,7 +1,5 @@
 <?php
-/**
- * Replace the built-in set-your-password email with your own
- */
+// Replace the built-in set-your-password email with your own
 
 // 1. Turn off the core email so the subscriber gets one message, not two.
 add_filter( 'benecaster_subscribe_send_password_email', '__return_false' );
