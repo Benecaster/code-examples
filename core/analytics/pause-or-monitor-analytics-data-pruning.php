@@ -40,6 +40,9 @@ add_action( 'benecaster_after_analytics_prune', function (
     ) );
 
     if ( $total_deleted > 100_000 ) {
+        // Plain wp_mail() is deliberate: this is an operator alert to the site's own
+        // admin address, where WordPress's own sender identity is correct and expected.
+        // Use benecaster_mail() instead for anything a podcaster or subscriber reads.
         wp_mail(
             get_option( 'admin_email' ),
             'Large Benecaster analytics prune completed',

@@ -21,7 +21,7 @@ add_action(
             home_url( '/docs/podcast-app-setup/' )
         );
 
-        wp_mail( $user->user_email, $subject, $body );
+        benecaster_mail( $show_id, $user->user_email, $subject, $body );
     },
     10,
     4

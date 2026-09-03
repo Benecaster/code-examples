@@ -33,7 +33,8 @@ add_action(
 
         $show = get_the_title( $show_id );
 
-        wp_mail(
+        benecaster_mail(
+            $show_id,
             $user->user_email,
             sprintf(
                 /* translators: %s: show name */

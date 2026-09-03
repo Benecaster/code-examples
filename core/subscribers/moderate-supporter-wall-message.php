@@ -11,6 +11,8 @@ add_action( 'benecaster_subscriber_wall_message', function ( int $user_id, strin
         // The action only fires when the write goes through SupporterWallManager::set_subscriber_message().
         // This is intentional — it prevents infinite loops in moderation hooks.
         update_user_meta( $user_id, '_benecaster_subscriber_wall_message', '' );
+        // Plain wp_mail() is deliberate: operator alert to the site's own admin address.
+        // Use benecaster_mail() for anything a podcaster or subscriber reads.
         wp_mail(
             get_option( 'admin_email' ),
             'Flagged Supporter Wall message',

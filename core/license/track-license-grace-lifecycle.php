@@ -10,6 +10,8 @@ add_action( 'benecaster_license_grace_started', function ( int $started_at, stri
         $reason
     );
 
+    // Plain wp_mail() is deliberate: operator alert to the site's own admin address.
+    // Use benecaster_mail() for anything a podcaster or subscriber reads.
     wp_mail( get_option( 'admin_email' ), __( 'Benecaster: payment failed', 'my-addon' ), $body );
 }, 10, 2 );
 

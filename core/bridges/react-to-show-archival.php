@@ -4,7 +4,7 @@
 add_action( 'benecaster_show_archived', function ( int $show_id ): void {
     // Farewell email to subscribers whose access is about to break.
     $recipients = get_show_subscriber_emails( $show_id );
-    wp_mail( $recipients, __( 'Feed archived', 'my-addon' ), '…' );
+    benecaster_mail( $show_id, $recipients, __( 'Feed archived', 'my-addon' ), '…' );
 
     // Clear any add-on caches keyed on the show.
     wp_cache_delete( "my_addon_show_{$show_id}", 'my_addon' );
