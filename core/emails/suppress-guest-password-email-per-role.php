@@ -1,7 +1,5 @@
 <?php
-/**
- * Suppress the Set-Password Email for a Role or a Provisioning Flow
- */
+// Suppress the Set-Password Email for a Role or a Provisioning Flow
 
 add_filter(
     'benecaster_subscribe_send_password_email',
