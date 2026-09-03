@@ -1,5 +1,5 @@
 <?php
-// Integrate a community platform not in the core set
+// Integrate a community platform not in the Benecaster set
 
 class MyPlatform implements \Benecaster\Community\CommunityPlatformInterface {
 
