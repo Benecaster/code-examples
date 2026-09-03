@@ -1,7 +1,5 @@
 <?php
-/**
- * Register a custom Member Thanks query type
- */
+// Register a custom Member Thanks query type
 
 // In your add-on's boot class:
 add_filter( 'benecaster_member_thanks_query_types', function ( array $types ): array {
