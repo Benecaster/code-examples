@@ -1,7 +1,5 @@
 <?php
-/**
- * Add a channel-level feed tag that names an episode, safely
- */
+// Add a channel-level feed tag that names an episode, safely
 
 use Benecaster\Episode\EpisodeMeta;
 use Benecaster\Feed\Namespaces\TierAwareFeedNamespaceInterface;
