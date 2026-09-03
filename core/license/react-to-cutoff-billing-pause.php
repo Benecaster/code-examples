@@ -1,5 +1,5 @@
 <?php
-// React When a Lapsed Licence Stops (and Later Restarts) Subscriber Billing
+// React when a lapsed licence stops (and later restarts) subscriber billing
 
 add_action( 'benecaster_cutoff_billing_pause_complete', 'my_addon_billing_paused', 10, 3 );
 add_action( 'benecaster_cutoff_billing_resume_complete', 'my_addon_billing_resumed', 10, 3 );
