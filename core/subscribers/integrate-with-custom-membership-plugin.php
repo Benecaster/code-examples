@@ -1,5 +1,5 @@
 <?php
-// Integrate with a membership plugin not in the core bridge set
+// Integrate with a membership plugin not in the built-in bridge set
 
 class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
 
