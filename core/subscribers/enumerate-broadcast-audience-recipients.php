@@ -1,7 +1,5 @@
 <?php
-/**
- * Enumerate WP User IDs Eligible for a Broadcast Audience
- */
+// Enumerate WP User IDs Eligible for a Broadcast Audience
 
 // Built-in audiences — including per-tier, which needs no callback.
 $paying = benecaster_find_audience_user_ids( $show_id, 'paying' );
