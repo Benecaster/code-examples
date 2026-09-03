@@ -1,5 +1,5 @@
 <?php
-// Search a secondary data source and inject episode IDs into the core result set
+// Search a secondary data source and inject episode IDs into the Benecaster result set
 
 add_filter(
     'benecaster_search_supplemental_episode_ids',
