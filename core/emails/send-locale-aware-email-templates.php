@@ -15,6 +15,6 @@ add_filter( 'benecaster_email_template_locale', function ( string $locale, ?int 
         }
     }
 
-    // Return '' for unsupported locales so core falls back to the default template.
+    // Return '' for unsupported locales so Benecaster falls back to the default template.
     return in_array( $locale, $supported, true ) ? $locale : '';
 }, 10, 4 );
