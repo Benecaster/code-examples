@@ -1,10 +1,10 @@
 <?php
 // Add a new payment processor alongside Stripe
 
-add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): void {
-    $container->bind( My\PayPalGateway::class, fn() => new My\PayPalGateway() );
-    $container->make( \Benecaster\Payment\PaymentGatewayRegistry::class )
-        ->register( $container->make( My\PayPalGateway::class ) );
+add_filter( 'benecaster_payment_gateways', function ( array $gateways ): array {
+    $gateways['benecaster_paypal'] = new PayPalGateway();
+
+    return $gateways;
 } );
 
 class PayPalGateway implements \Benecaster\Payment\PodcastPaymentGateway {
