@@ -1,11 +1,19 @@
 <?php
 // Programmatically install and activate a design template
 
-add_action( 'benecaster_boot', function ( \Benecaster\Container $c ): void {
-    $uploader = $c->make( \Benecaster\Template\TemplateUpload::class );
-
+add_action( 'benecaster_boot', function (): void {
     // Never override a choice the site owner has already made.
-    if ( null !== $uploader->get_active() ) {
+    $active = benecaster_get_active_template();
+
+    // WP_Error means "could not tell" — never install on a failed read.
+    if ( is_wp_error( $active ) ) {
+        return;
+    }
+
+    // A non-built-in template active means the owner picked something.
+    // A built-in one means the site is on an untouched default, which is
+    // not a choice and is safe to replace.
+    if ( null !== $active && ! $active['built_in'] ) {
         return;
     }
 
@@ -20,5 +28,9 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $c ): void {
         return;
     }
 
-    $uploader->activate( $manifest['slug'] );
+    $activated = benecaster_activate_template( $manifest['slug'] );
+
+    if ( is_wp_error( $activated ) ) {
+        error_log( 'Template activation failed: ' . $activated->get_error_message() );
+    }
 } );
