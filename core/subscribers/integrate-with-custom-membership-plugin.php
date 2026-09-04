@@ -75,10 +75,19 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
     public function on_tier_saved( callable $callback ): void {}
 }
 
-// ⚠ This is where it stops. BridgeManager has no registration point, so
-// there is currently nothing to hand the class to. Left here deliberately
-// to show the shape the registration call will take when it ships.
-add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): void {
-    // $container->make( \Benecaster\Bridge\BridgeManager::class )
-    //           ->set_active_bridge( YOUR_SHOW_ID, 'my-plugin' );
+// Register the bridge. A class name, not an instance - Benecaster resolves
+// it through the container, so constructor dependencies are injected for you.
+add_filter( 'benecaster_bridges', function ( array $bridges ): array {
+    $bridges['my-plugin'] = [
+        'name'      => __( 'My Membership Plugin', 'my-addon' ),
+        'class'     => MyPlugin_Bridge::class,
+        'available' => fn (): bool => function_exists( 'my_plugin_get_active_levels' ),
+    ];
+
+    return $bridges;
 } );
+
+// The podcaster picks the bridge in Settings -> Subscription. An add-on with
+// its own setup wizard can connect it directly instead - always check the
+// return value, because a refusal is returned rather than thrown.
+// benecaster_set_active_bridge( $show_id, 'my-plugin' );
