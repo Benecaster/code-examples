@@ -1,22 +1,20 @@
 <?php
-// Auto-populate custom fields from imported RSS data
+// Capture custom RSS namespace data during an import
 
 add_action(
     'benecaster_episode_imported',
-    function ( int $episode_id, int $show_id, array $source_item ): void {
-        // $source_item['raw_xml'] holds the untouched <item> as a SimpleXMLElement.
-        $item = $source_item['raw_xml'] ?? null;
-        if ( ! $item instanceof SimpleXMLElement ) {
-            return;
-        }
-        $ns = $item->getNamespaces( true );
+    function ( int $episode_id, int $show_id, SimpleXMLElement $rss_item ): void {
+        $ns = $rss_item->getNamespaces( true );
+
         if ( ! isset( $ns['mystudio'] ) ) {
             return;
         }
-        $mystudio = $item->children( $ns['mystudio'] );
+
+        $mystudio = $rss_item->children( $ns['mystudio'] );
         $sponsor  = trim( (string) ( $mystudio->sponsor ?? '' ) );
+
         if ( '' !== $sponsor ) {
-            benecaster_update_field( 'sponsor', $sponsor, $episode_id );
+            update_post_meta( $episode_id, '_my_addon_sponsor', $sponsor );
         }
     },
     10,
