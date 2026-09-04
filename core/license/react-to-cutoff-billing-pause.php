@@ -10,7 +10,7 @@ add_action( 'benecaster_cutoff_billing_resume_complete', 'my_addon_billing_resum
  * @param array $skipped_shows show_id => 'test_mode' | 'no_keys'
  */
 function my_addon_billing_paused( int $paused, array $failures, array $skipped_shows ): void {
-    // ⚠ The interesting argument is $failures, not $paused. A failure means
+    // The interesting argument is $failures, not $paused. A failure means
     // that subscriber is STILL BEING CHARGED for a feed returning 403 —
     // the one outcome worth waking somebody up for.
     if ( [] === $failures && [] === $skipped_shows ) {
