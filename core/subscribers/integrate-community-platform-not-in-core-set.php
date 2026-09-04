@@ -30,7 +30,9 @@ class MyPlatform implements \Benecaster\Community\CommunityPlatformInterface {
     }
 }
 
-add_action( 'benecaster_boot', function ( \Benecaster\Container $container ) {
-    $container->make( \Benecaster\Community\CommunityPlatformRegistry::class )
-              ->register( new MyPlatform() );
+// Registration. Keyed by platform slug; the value is your instance.
+add_filter( 'benecaster_community_platforms', function ( array $platforms ): array {
+    $platforms['my-platform'] = new MyPlatform();
+
+    return $platforms;
 } );
