@@ -3,7 +3,10 @@
 
 // Analytics Dashboard add-on: export the nightly snapshot table.
 add_action( 'benecaster_boot', function (): void {
-    if ( ! benecaster_addon_is_active( 'analytics-dashboard' ) ) {
+    // ⚠ Boot time has NO show in hand, so the install-wide question is
+    // the correct one here — this registers a sheet, it does not decide
+    // who may see data. Per-show gating happens in the row callback.
+    if ( ! benecaster_addon_is_active_for_any_show( 'analytics-dashboard' ) ) {
         return;
     }
 
