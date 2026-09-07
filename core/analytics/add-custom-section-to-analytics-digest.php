@@ -4,7 +4,7 @@
 add_filter(
     'benecaster_analytics_digest_data',
     function ( array $data, string $type, int $show_id, array $period ): array {
-        if ( ! benecaster_addon_is_active( 'listener-support' ) ) {
+        if ( ! benecaster_addon_is_active( 'listener-support', $show_id ) ) {
             return $data;
         }
         global $wpdb;
@@ -32,7 +32,7 @@ add_filter(
 add_filter(
     'benecaster_analytics_digest_sections',
     function ( array $sections, string $type, int $show_id, array $data ): array {
-        if ( ! benecaster_addon_is_active( 'listener-support' ) ) {
+        if ( ! benecaster_addon_is_active( 'listener-support', $show_id ) ) {
             return $sections;
         }
         $totals = $data['listener_support_totals'] ?? null;
