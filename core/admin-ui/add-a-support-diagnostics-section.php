@@ -1,14 +1,6 @@
 <?php
-// Add a Support Diagnostics Section
+// Switch Off, or Restyle, the Feed Landing Page
 
-add_filter( 'benecaster_support_diagnostics_sections', function ( array $sections ): array {
-    $sections[] = [
-        'id'     => 'my-addon-health',
-        'title'  => __( 'My Add-on Health', 'my-addon' ),
-        'render' => function () {
-            // Echo your own markup — this is called with no arguments.
-            echo '<p>' . esc_html( my_addon_get_last_sync_status() ) . '</p>';
-        },
-    ];
-    return $sections;
-} );
+add_filter( 'benecaster_feed_landing_page_enabled', function ( bool $enabled, int $show_id ): bool {
+    return 42 === $show_id ? false : $enabled;
+}, 10, 2 );
