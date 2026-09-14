@@ -14,3 +14,11 @@ add_action( 'benecaster_membership_tier_created', function ( int $tier_id, array
 add_action( 'benecaster_membership_tier_deleted', function ( int $tier_id, int $show_id, string $tier_slug ): void {
     my_crm_deactivate_plan( 'benecaster:' . $show_id . ':' . $tier_slug );
 }, 10, 3 );
+
+// A reorder on Memberships → Tiers fires this once for the show, NOT
+// benecaster_membership_tier_updated per tier. Rank = position (0 = lowest).
+add_action( 'benecaster_membership_tiers_reordered', function ( int $show_id, array $tier_ids ): void {
+    foreach ( $tier_ids as $rank => $tier_id ) {
+        my_crm_set_plan_rank( $show_id, $tier_id, $rank );
+    }
+}, 10, 2 );
