@@ -30,15 +30,22 @@ add_shortcode( 'my_tiered_search', function ( $atts ): string {
         return do_shortcode( $fallback_shortcode );
     }
 
-    $repo          = new \Benecaster\Membership\MembershipTierRepository();
-    $required_tier = $repo->find_by_slug( $show_id, $required_slug );
-    $user_tier     = $repo->find_by_slug( $show_id, $user_tier_slug );
+    // Rank by POSITION in the show's tier list (lowest first), never by
+    // the raw tier_order value: tiers created in the Memberships admin
+    // all stored tier_order = 0, so comparing values would admit every
+    // tier, a free one included.
+    $ranked  = ( new \Benecaster\Membership\MembershipTierRepository() )->ranked_slugs( $show_id );
+    $user_at = array_search( $user_tier_slug, $ranked, true );
+    $need_at = array_search( $required_slug, $ranked, true );
 
-    if ( null === $required_tier || null === $user_tier ) {
+    // If either tier can't be resolved (e.g. tier was deleted), be
+    // conservative and fall back to the core search rather than
+    // accidentally exposing AI search to someone who shouldn't have it.
+    if ( false === $user_at || false === $need_at ) {
         return do_shortcode( $fallback_shortcode );
     }
 
-    if ( (int) $user_tier['tier_order'] >= (int) $required_tier['tier_order'] ) {
+    if ( $user_at >= $need_at ) {
         return do_shortcode( $ai_shortcode );
     }
 
