@@ -1,19 +1,19 @@
 <?php
-// Route all enclosure URLs through Podtrac
+// Count feed downloads with Podtrac, OP3 or Podscribe
 
-add_filter(
-    'benecaster_feed_enclosure_url',
-    function ( string $url, int $episode_id, int $show_id, ?string $tier_slug ): string {
-        if ( '' === $url ) {
-            return $url;
-        }
-        $parts = wp_parse_url( $url );
-        if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
-            return $url;
-        }
-        $host_and_path = $parts['host'] . ( $parts['path'] ?? '' );
-        return 'https://dts.podtrac.com/redirect.mp3/' . $host_and_path;
-    },
-    10,
-    4
-);
+add_filter( 'benecaster_feed_enclosure_url', function (
+    string $url,
+    int    $episode_id,
+    int    $show_id,
+    string $tier_slug
+): string {
+    $outer = 'https://op3.dev/e/';
+    if ( '' === $url || str_starts_with( $url, $outer ) ) {
+        return $url;
+    }
+    // Never wrap the download proxy URL: it carries the subscriber's feed token.
+    if ( str_starts_with( $url, home_url( '/benecaster-download/' ) ) ) {
+        return $url;
+    }
+    return $outer . preg_replace( '#^https://#i', '', $url );
+}, 20, 4 );
