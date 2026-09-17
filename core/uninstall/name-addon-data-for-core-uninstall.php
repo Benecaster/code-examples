@@ -1,4 +1,4 @@
-// Name an add-on's data for core uninstall
+// Name an add-on's data for Benecaster's uninstall
 
 <?php
 // wp-content/plugins/benecaster-addon-guests/uninstall.php
@@ -20,4 +20,3 @@ $wpdb->query(
 );
 
 wp_clear_scheduled_hook( 'benecaster_guests_daily_sync' );
-} );
