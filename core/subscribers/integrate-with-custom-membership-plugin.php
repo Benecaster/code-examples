@@ -62,7 +62,13 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
         add_action( 'my_plugin_member_cancelled', function ( $user_id, $level_id ) use ( $callback ): void {
             $tier = $this->tier_map->find_by_external( 'my-plugin', (string) $level_id );
             if ( $tier ) {
-                $callback( (int) $user_id, (int) $tier->show_id );
+                // user_id, show_id, reason - three arguments ($reason added 2026-09-18).
+                // 'my-plugin' has no separate lapse event here, so every cancellation
+                // reports 'cancelled'. A plugin that CAN tell a lapse (a fixed term ran
+                // out, renewals gave up) from a deliberate cancellation must pass
+                // 'expired' for the lapse instead, or benecaster_subscription_expired
+                // never fires for its members and their tokens stay active.
+                $callback( (int) $user_id, (int) $tier->show_id, 'cancelled' );
             }
         }, 10, 2 );
     }
