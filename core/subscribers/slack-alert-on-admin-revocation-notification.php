@@ -1,9 +1,9 @@
 <?php
-// Send a Slack alert when an admin revokes a subscriber's access and notifies them
+// Send a Slack alert when a subscriber's access is revoked
 
 add_action(
-    'benecaster_admin_revoke_notify',
-    function ( int $token_id, int $user_id, int $show_id ): void {
+    'benecaster_subscriber_access_revoked',
+    function ( int $user_id, int $show_id ): void {
         $user = get_userdata( $user_id );
         if ( ! $user ) {
             return;
@@ -21,5 +21,5 @@ add_action(
         ] );
     },
     10,
-    3
+    2
 );
