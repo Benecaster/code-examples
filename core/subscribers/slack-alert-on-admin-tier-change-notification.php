@@ -1,9 +1,9 @@
 <?php
-// Send a Slack alert when an admin changes a subscriber's tier and notifies them
+// Send a Slack alert when a subscriber's tier changes
 
 add_action(
-    'benecaster_admin_tier_change_notify',
-    function ( int $token_id, int $user_id, int $show_id, string $old_tier, string $new_tier ): void {
+    'benecaster_subscription_tier_changed',
+    function ( int $user_id, int $show_id, string $old_tier_slug, string $new_tier_slug ): void {
         $user = get_userdata( $user_id );
         if ( ! $user ) {
             return;
@@ -13,8 +13,8 @@ add_action(
                 'text' => sprintf(
                     'Tier change: %s moved from %s to %s (show %d).',
                     $user->user_email,
-                    $old_tier,
-                    $new_tier,
+                    $old_tier_slug,
+                    $new_tier_slug,
                     $show_id
                 ),
             ] ),
@@ -23,5 +23,5 @@ add_action(
         ] );
     },
     10,
-    5
+    4
 );
