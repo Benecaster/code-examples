@@ -2,7 +2,7 @@
 // Add Manual Membership Support to a Custom Bridge
 
 // 1. In your bridge class, implement create_manual_membership() directly.
-//    Remove ManualMembershipUnsupportedTrait if you previously used it.
+//    Do not use ManualMembershipUnsupportedTrait in a bridge that implements it.
 class AcmeMembershipBridge implements \Benecaster\Bridge\BridgeInterface {
 
     // ... other BridgeInterface methods ...
