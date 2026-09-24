@@ -22,5 +22,5 @@ wp.domReady( () => {
 // BenecasterEpisodeEditorAfterFields — { episodeId, showId }
 // BenecasterShowEditorAfterFields    — { showId }
 // BenecasterDashboardCards           — { showId }
-// BenecasterSettingsPage_{id}        — { showId }
+// BenecasterSettingsPage_{id}        — no props (install-wide Settings screen)
 // BenecasterSubscriberDetailAfter    — { subscriberId, showId }
