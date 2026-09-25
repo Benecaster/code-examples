@@ -1,5 +1,5 @@
 <?php
-// Deliver a downloadable extra to the people who bought your add-on
+// Deliver a downloadable extra to the people who bought your buy-up
 
 // Put colouring-book buyers on a mailing list when they open the "crafts" page.
 add_action( 'template_redirect', function (): void {
@@ -8,10 +8,10 @@ add_action( 'template_redirect', function (): void {
     }
 
     $user_id = get_current_user_id();
-    $show_id = 3;  // The show that sells the add-on.
+    $show_id = 3;  // The show that sells the buy-up.
 
-    // The "Colouring Book" add-on's row ID in benecaster_buyups.
-    // An add-on lasts only as long as the membership it rides on.
+    // The "Colouring Book" buy-up's row ID in benecaster_buyups.
+    // A buy-up lasts only as long as the membership it rides on.
     $colouring_book_buyup_id = 12;
 
     if ( benecaster_user_has_buyup( $user_id, $colouring_book_buyup_id, $show_id ) ) {
