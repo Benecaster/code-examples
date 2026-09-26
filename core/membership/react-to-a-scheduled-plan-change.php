@@ -32,3 +32,37 @@ add_action(
     10,
     4
 );
+
+// They chose the FREE plan. Their paid subscription ends at $switch_at
+// without charging again. Not a cancellation: they stay a member.
+add_action(
+    'benecaster_subscription_free_switch_scheduled',
+    function ( $user_id, $show_id, $from_tier_slug, $to_tier_slug, $switch_at ) {
+        // A win-back email sent here reaches somebody who is still a member.
+        my_note_intent( $user_id, $to_tier_slug, $switch_at );
+    },
+    10,
+    5
+);
+
+// The free move landed. benecaster_subscription_tier_changed has already
+// fired above; this says why. Same feed URL.
+add_action(
+    'benecaster_subscription_free_switch_landed',
+    function ( $user_id, $show_id, $from_tier_slug, $to_tier_slug ) {
+        my_move_to_free_segment( $user_id, $from_tier_slug );
+    },
+    10,
+    4
+);
+
+// A free member took out a paid plan through signup. No switch hook fires,
+// and neither does benecaster_subscription_tier_changed.
+add_action(
+    'benecaster_subscription_activated',
+    function ( $user_id, $show_id, $tier_slug, $source ) {
+        my_provision_tier_perks( $user_id, $tier_slug );
+    },
+    10,
+    4
+);
