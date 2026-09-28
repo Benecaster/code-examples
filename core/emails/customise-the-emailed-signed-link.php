@@ -22,7 +22,7 @@ add_filter( 'benecaster_signed_link_ttl', function ( int $ttl, string $purpose )
  * Land followers on a custom members page instead of the account page.
  *
  * ⚠ Return an absolute URL on this site. The link is consumed by
- * SignedLinkEndpoint on `init` wherever it lands, so the destination only
+ * Benecaster on `init` wherever it lands, so the destination only
  * decides what the follower SEES — but wp_safe_redirect() will refuse an
  * off-site host and drop them on the home page instead.
  */
@@ -51,7 +51,7 @@ add_action( 'benecaster_signed_link_consumed', function ( int $user_id, string $
  * Show a friendly notice when someone arrives from a dead link.
  *
  * ⚠ Say only that the link no longer works. Do NOT try to explain WHY —
- * core deliberately gives every refusal the same destination, because
+ * Benecaster deliberately gives every refusal the same destination, because
  * distinguishing "expired" from "already used" from "not a real link"
  * tells someone holding a stolen or guessed token which part of it to work
  * on. Reading this flag and printing four different messages would rebuild
