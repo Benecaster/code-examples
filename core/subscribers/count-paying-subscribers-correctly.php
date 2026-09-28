@@ -18,7 +18,7 @@ $tokens     = $wpdb->prefix . 'benecaster_tokens';
 $tier_map   = $wpdb->prefix . 'benecaster_tier_map';          // external bridges
 $mem_tiers  = $wpdb->prefix . 'benecaster_membership_tiers';  // built-in membership
 
-// The exempt types, read from core so the query can't fall behind it.
+// The exempt types, read from Benecaster so the query can't fall behind it.
 $exempt       = \Benecaster\Token\TokenRepository::PAYING_EXEMPT_TOKEN_TYPES;
 $placeholders = implode( ', ', array_fill( 0, count( $exempt ), '%s' ) );
 
