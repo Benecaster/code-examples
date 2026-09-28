@@ -39,7 +39,7 @@ add_shortcode( 'my_tiered_search', function ( $atts ): string {
     $need_at = array_search( $required_slug, $ranked, true );
 
     // If either tier can't be resolved (e.g. tier was deleted), be
-    // conservative and fall back to the core search rather than
+    // conservative and fall back to the built-in search rather than
     // accidentally exposing AI search to someone who shouldn't have it.
     if ( false === $user_at || false === $need_at ) {
         return do_shortcode( $fallback_shortcode );
