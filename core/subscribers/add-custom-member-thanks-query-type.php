@@ -14,7 +14,7 @@ add_filter( 'benecaster_member_thanks_query_types', function ( array $types ): a
 
             $count = (int) ( $args['count'] ?? 5 );
 
-            // Your query answers the part core cannot: WHO. Select IDs only.
+            // Your query answers the part Benecaster cannot: WHO. Select IDs only.
             //
             // my_addon_donations is the add-on's own mirror of donation activity,
             // written from benecaster_listener_support_donation_logged. Mirror what
@@ -31,7 +31,7 @@ add_filter( 'benecaster_member_thanks_query_types', function ( array $types ): a
                 $count > 0 ? $count : PHP_INT_MAX
             ) );
 
-            // Core answers the rest: display name, tier, join date - filled the
+            // Benecaster answers the rest: display name, tier, join date - filled the
             // same way the built-in query types fill them.
             return benecaster_get_member_thanks_rows( $show_id, array_map( 'intval', $user_ids ) );
         },
