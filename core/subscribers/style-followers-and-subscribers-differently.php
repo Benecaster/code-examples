@@ -6,4 +6,4 @@ add_filter( 'benecaster_user_badges', function ( array $badges ): array {
         $badges,
         static fn( $b ) => 'follower_auto' !== ( $b->source ?? '' )
     ) );
-}, 20 ); // after core appends it at priority 15
+}, 20 ); // after Benecaster appends it at priority 15
