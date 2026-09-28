@@ -56,6 +56,17 @@ add_action(
     4
 );
 
+// They took the free move back, or cancelled the membership outright
+// instead. Undo whatever the free_switch_scheduled callback recorded.
+add_action(
+    'benecaster_subscription_free_switch_cancelled',
+    function ( $user_id, $show_id, $to_tier_slug, $reason ) {
+        my_clear_intent( $user_id, $show_id );
+    },
+    10,
+    4
+);
+
 // A free member took out a paid plan through signup. No switch hook fires,
 // and neither does benecaster_subscription_tier_changed.
 add_action(
