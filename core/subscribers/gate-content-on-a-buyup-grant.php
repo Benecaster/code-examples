@@ -6,6 +6,6 @@ if ( benecaster_user_has_buyup( 0, $transcripts_buyup_id, $show_id ) ) {
     // Render the transcript download block.
     echo do_shortcode( '[my_transcript_download episode="' . $episode_id . '"]' );
 } else {
-    // Render the "Add transcripts to your plan" upsell.
-    echo do_shortcode( '[benecaster_buyup_upsell buyup="' . $transcripts_buyup_id . '"]' );
+    // Point everyone else to the Extras section of their account page.
+    echo '<p>' . esc_html__( 'Add transcripts from the Extras section of your account page.', 'my-theme' ) . '</p>';
 }
