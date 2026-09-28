@@ -1,5 +1,5 @@
 <?php
-// Register an Add-on Bootstrap With Core's Entitlement Gate
+// Register an Add-on Bootstrap With Benecaster's Entitlement Gate
 
 add_action( 'benecaster_boot', function ( \Benecaster\Container $container ) {
     benecaster_register_addon(
@@ -11,7 +11,7 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ) {
             $container->make( \GuestManager\GuestManagerPlugin::class )->register();
         },
         [
-            'version'      => '1.60.0',                        // minimum Benecaster core version
+            'version'      => '1.60.0',                        // minimum Benecaster version
             'capabilities' => [ 'benecaster_addon_is_active' ], // function/class names that must exist
         ]
     );
