@@ -1,5 +1,5 @@
 <?php
-// Ask whether this install is staging — and know which question you are asking
+// Ask whether this install is staging
 
 use Benecaster\Staging\EnvironmentDeclaration;
 use Benecaster\Staging\EnvironmentResolver;
@@ -17,7 +17,7 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): vo
     $declared = $container->make( EnvironmentResolver::class )->declared();
 
     if ( EnvironmentDeclaration::Undeclared === $declared ) {
-        // Nobody said. Core fell through to hostname detection, which
+        // Nobody said. Benecaster fell through to hostname detection, which
         // can be wrong in both directions — surface it rather than
         // silently acting on it.
         my_addon_log( 'Environment was detected, not declared.' );
