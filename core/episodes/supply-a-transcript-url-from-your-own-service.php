@@ -4,7 +4,7 @@
 add_filter(
     'benecaster_podcast2_transcript_autodetect',
     function ( ?string $url, int $episode_id ): ?string {
-        // Let core's media-library detection win when it found something.
+        // Let Benecaster's media-library detection win when it found something.
         if ( null !== $url ) {
             return $url;
         }
