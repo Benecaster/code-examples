@@ -19,7 +19,7 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): vo
         }
     }
 
-    // Insert the new Price row. StripeTierProvisioner picks this up on the
+    // Insert the new Price row. Benecaster picks this up on the
     // next reconciliation and mints the corresponding Stripe Price against
     // the tier's existing Stripe Product — no admin visit required.
     $prices->insert( [
