@@ -14,12 +14,13 @@ add_action(
                 'user_id'   => $user_id,
                 'show_id'   => $show_id,
                 'platform'  => $platform,
-                // Segment on the tier, not on token_type: a free source
-                // tier can land on a free tier as a 'subscriber'.
                 'tier'      => $data['mapped_tier_slug'],
-                'type'      => $data['token_type'],
+                // Segment on is_free, never on token_type: a free source
+                // tier can land on a free tier as a 'subscriber'.
+                'is_free'   => $data['is_free'],
                 'joined_at' => $data['source_joined_at'],  // may be null
-                'deadline'  => $data['grace_period_ends_at'],
+                // A free member has no deadline, whatever the batch says.
+                'deadline'  => $data['is_free'] ? null : $data['grace_period_ends_at'],
             ]
         );
     },
