@@ -1,7 +1,8 @@
 <?php
 // React to a scheduled plan change, and to the change itself
 
-// They ASKED. Nothing has been charged and their access has not moved.
+// They ASKED to move down, or to a same-priced tier. Nothing has been charged
+// and their access has not moved. An upgrade never fires this.
 add_action(
     'benecaster_subscription_tier_switch_scheduled',
     function ( $user_id, $show_id, $from_tier_slug, $to_tier_slug, $switch_at ) {
@@ -23,6 +24,7 @@ add_action(
 );
 
 // It HAPPENED. Their tier, their feed and their badges have moved.
+// An upgrade lands here the moment it is paid; anything else at the renewal.
 add_action(
     'benecaster_subscription_tier_changed',
     function ( $user_id, $show_id, $old_tier_slug, $new_tier_slug ) {
