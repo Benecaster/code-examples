@@ -4,7 +4,7 @@
 /**
  * Shorten the life of emailed account links from one week to 48 hours.
  *
- * ⚠ Shorter is safer, but not free: the link lives in a mailbox, and a
+ * Shorter is safer, but not free: the link lives in a mailbox, and a
  * follower who submits the form on a Friday evening and opens their mail on
  * Monday must still be able to click it. Do not go below a day without a
  * reason — an expired link costs you the signup, not just the click.
@@ -21,7 +21,7 @@ add_filter( 'benecaster_signed_link_ttl', function ( int $ttl, string $purpose )
 /**
  * Land followers on a custom members page instead of the account page.
  *
- * ⚠ Return an absolute URL on this site. The link is consumed by
+ * Return an absolute URL on this site. The link is consumed by
  * Benecaster on `init` wherever it lands, so the destination only
  * decides what the follower SEES — but wp_safe_redirect() will refuse an
  * off-site host and drop them on the home page instead.
@@ -35,7 +35,7 @@ add_filter( 'benecaster_signed_link_base_url', function ( string $url, string $p
 /**
  * Do something once, the first and only time a link is clicked.
  *
- * ⚠ Fires AFTER the token is spent, so a replay never reaches this — which
+ * Fires AFTER the token is spent, so a replay never reaches this — which
  * is exactly why it is safe to do something non-idempotent here. Firing it
  * before consumption would let anyone with a copy of the URL run it twice.
  */
@@ -50,7 +50,7 @@ add_action( 'benecaster_signed_link_consumed', function ( int $user_id, string $
 /**
  * Show a friendly notice when someone arrives from a dead link.
  *
- * ⚠ Say only that the link no longer works. Do NOT try to explain WHY —
+ * Say only that the link no longer works. Do NOT try to explain WHY —
  * Benecaster deliberately gives every refusal the same destination, because
  * distinguishing "expired" from "already used" from "not a real link"
  * tells someone holding a stolen or guessed token which part of it to work
@@ -71,7 +71,7 @@ add_action( 'benecaster_before_account', function (): void {
 /**
  * Nudge passwordless arrivals towards setting a password, once.
  *
- * ⚠ Fires IN ADDITION to wp_login, not instead of it. A listener hooked to
+ * Fires IN ADDITION to wp_login, not instead of it. A listener hooked to
  * both will run twice for one arrival — pick one.
  */
 add_action( 'benecaster_signed_link_logged_in', function ( int $user_id, string $purpose ): void {
