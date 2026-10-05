@@ -6,7 +6,8 @@ window.BenecasterExtensions.tours = window.BenecasterExtensions.tours || [];
 window.BenecasterExtensions.tours.push( {
     id:    'email-editor',
     label: 'Email Editor Tour',
-    condition: () => window.benecasterAdmin.addons.includes( 'email-editor' ),
+    // `addons` holds full entitlement slugs; the short slug 'email-editor' matches nothing.
+    condition: () => window.benecasterAdmin.addons.includes( 'benecaster-addon-email-editor' ),
     steps: [
         {
             id:       'pick-template',
