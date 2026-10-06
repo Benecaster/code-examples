@@ -15,7 +15,8 @@ add_action( 'enqueue_block_editor_assets', function () {
 
     wp_localize_script( 'my-benecaster-blocks', 'myBenecasterPickers', [
         'socialPlatforms'  => benecaster_get_social_platforms(),  // [benecaster_social_links]
-        'podcastPlatforms' => benecaster_get_podcast_platforms(), // [benecaster_platform_links]
+        'podcastPlatforms' => benecaster_get_podcast_platforms(), // [benecaster_platform_links], ends with `rss`
+        'autoPlatforms'    => benecaster_get_automatic_podcast_platforms(), // no URL to enter: [ 'rss' ]
         'sharePlatforms'   => benecaster_get_share_platforms(),   // [benecaster_episode_share], also its default
         'shareMergeTags'   => benecaster_get_share_merge_tags(),  // tags its `text` attribute resolves
     ] );
