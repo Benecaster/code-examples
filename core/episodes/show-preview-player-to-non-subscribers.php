@@ -2,8 +2,8 @@
 // Let visitors who can't hear an episode play a preview clip
 
 // Open the player for locked visitors, but only where a clip exists and the
-// episode has a main audio URL. Without one, the player template falls back
-// to the episode's embed or video, and that would be the full episode.
+// episode has a main audio URL. Without one there is nothing to swap: the
+// player templates play only the audio URL for a visitor without access.
 add_filter( 'benecaster_show_episode_player', function ( bool $show, int $episode_id ): bool {
     if ( $show ) {
         return true;
