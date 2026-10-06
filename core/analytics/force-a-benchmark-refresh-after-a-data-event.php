@@ -10,7 +10,7 @@ add_filter( 'benecaster_benchmarks_fetch_skip', function ( bool $skip, string $s
     return $skip;
 }, 10, 2 );
 
-add_action( 'benecaster_benchmarks_refreshed', function ( array $payload ): void {
+add_action( 'benecaster_benchmarks_refreshed', function ( array $payload, string $show_uuid ): void {
     // Mirror the just-cached payload into a Slack channel for an at-a-glance daily check.
     if ( empty( $payload['benchmarks']['subscriber_count'] ) ) {
         return;
@@ -18,6 +18,6 @@ add_action( 'benecaster_benchmarks_refreshed', function ( array $payload ): void
     wp_remote_post( SLACK_WEBHOOK_URL, [
         'timeout'  => 5,
         'blocking' => false,
-        'body'     => wp_json_encode( [ 'text' => 'Benchmarks refreshed — p50: ' . $payload['benchmarks']['subscriber_count']['p50'] ] ),
+        'body'     => wp_json_encode( [ 'text' => "Benchmarks refreshed for {$show_uuid}'s licence — p50: " . $payload['benchmarks']['subscriber_count']['p50'] ] ),
     ] );
-} );
+}, 10, 2 );
