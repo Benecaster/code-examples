@@ -9,7 +9,8 @@ add_action(
         }
 
         $lines = array_map(
-            static fn ( $id ): string => '- ' . get_the_title( (int) $id ),
+            // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+            static fn ( $id ): string => '- ' . html_entity_decode( get_the_title( (int) $id ), ENT_QUOTES, 'UTF-8' ),
             $result['draft_ids']
         );
 
@@ -20,7 +21,7 @@ add_action(
             'body'     => wp_json_encode( [
                 'text' => sprintf(
                     "*%s*: %d new draft(s) from Feed Sync (%s):\n%s",
-                    get_the_title( (int) $result['show_id'] ),
+                    html_entity_decode( get_the_title( (int) $result['show_id'] ), ENT_QUOTES, 'UTF-8' ),
                     count( $result['draft_ids'] ),
                     $result['triggered_by'],
                     implode( "\n", $lines )
