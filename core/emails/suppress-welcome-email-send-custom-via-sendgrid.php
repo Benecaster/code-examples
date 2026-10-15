@@ -22,7 +22,8 @@ add_filter(
                         'to'                    => [ [ 'email' => $to ] ],
                         'dynamic_template_data' => [
                             'first_name' => get_userdata( $user_id )->first_name,
-                            'show_name'  => get_the_title( $show_id ),
+                            // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+                            'show_name'  => html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' ),
                         ],
                     ] ],
                     'template_id'             => 'd-your-sendgrid-template-id',
