@@ -5,7 +5,8 @@ add_action( 'benecaster_episode_published', function ( int $episode_id, int $sho
     $payload = [
         'episode_id'   => $episode_id,
         'show_id'      => $show_id,
-        'title'        => get_the_title( $episode_id ),
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        'title'        => html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ),
         'audio_url'    => get_post_meta( $episode_id, '_benecaster_audio_url', true ),
         'published_at' => get_the_date( 'c', $episode_id ),
     ];
