@@ -5,7 +5,8 @@ add_filter(
     'benecaster_episode_share_links',
     function ( array $links, int $episode_id, int $show_id ): array {
         $permalink = get_permalink( $episode_id );
-        $title     = rawurlencode( get_the_title( $episode_id ) );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $title     = rawurlencode( html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ) );
 
         // Replace default links with a podcast-specific set.
         return [
