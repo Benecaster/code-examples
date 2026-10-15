@@ -9,7 +9,8 @@ add_action( 'benecaster_episode_updated', function ( int $episode_id, int $show_
     $payload = [ 'episode_id' => $episode_id, 'changed' => $changed_fields ];
 
     if ( in_array( 'title', $changed_fields, true ) ) {
-        $payload['title'] = get_the_title( $episode_id );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $payload['title'] = html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' );
     }
     if ( in_array( 'post_status', $changed_fields, true ) ) {
         $payload['status'] = get_post_status( $episode_id );
