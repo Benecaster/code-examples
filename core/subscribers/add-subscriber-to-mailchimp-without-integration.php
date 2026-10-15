@@ -26,7 +26,8 @@ add_action(
                     'merge_fields'  => [
                         'FNAME' => $user->first_name,
                         'TIER'  => $tier_slug,
-                        'SHOW'  => get_the_title( $show_id ),
+                        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+                        'SHOW'  => html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' ),
                     ],
                     'tags' => [ 'benecaster', "show-{$show_id}" ],
                 ] ),
