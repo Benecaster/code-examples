@@ -9,7 +9,8 @@ add_action(
             return;
         }
 
-        $show_name = get_the_title( $show_id );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $show_name = html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' );
         $subject   = sprintf( 'Need help setting up %s?', $show_name );
         $body      = sprintf(
             "Hi %s,\n\nWe noticed your %s feed hasn't been added to a podcast app yet. "
