@@ -7,10 +7,11 @@ add_action( 'benecaster_episode_published', function ( int $episode_id, int $sho
             $user_id,
             'my_episode_notification',
             /* translators: %s: episode title */
-            sprintf( __( 'New episode: %s', 'my-addon' ), get_the_title( $episode_id ) ),
+            sprintf( __( 'New episode: %s', 'my-addon' ), html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ) ),
             'my-addon/episode-notification',
             [
                 'show_id'       => $show_id,
+                // Stays HTML: merge tags go into the HTML body unescaped. Only the subject is plain text.
                 'episode_title' => get_the_title( $episode_id ),
                 'episode_url'   => get_permalink( $episode_id ),
             ]
