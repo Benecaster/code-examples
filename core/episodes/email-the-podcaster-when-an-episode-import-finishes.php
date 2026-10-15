@@ -2,7 +2,8 @@
 // Email the podcaster when an episode import finishes
 
 add_action( 'benecaster_bulk_import_completed', function ( int $show_id, array $progress, string $job_id, string $feed_url ): void {
-    $show = get_the_title( $show_id );
+    // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+    $show = html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' );
 
     if ( 'failed' === $progress['status'] ) {
         wp_mail(
