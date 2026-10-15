@@ -29,7 +29,8 @@ add_action(
             wp_login_url()
         );
 
-        $show = get_the_title( $show_id );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $show = html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' );
 
         benecaster_mail(
             $show_id,
