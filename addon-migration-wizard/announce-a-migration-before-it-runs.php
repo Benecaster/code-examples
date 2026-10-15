@@ -6,7 +6,8 @@
 add_action(
     'benecaster_migration_import_started',
     static function ( int $show_id, string $platform, int $batch_id ): void {
-        $show = get_the_title( $show_id );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $show = html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' );
 
         wp_mail(
             get_option( 'admin_email' ),
