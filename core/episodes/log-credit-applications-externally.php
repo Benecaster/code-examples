@@ -12,8 +12,9 @@ add_action(
             return;
         }
 
-        $episode_title = get_the_title( $episode_id );
-        $show_title    = get_the_title( $show_id );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        $episode_title = html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' );
+        $show_title    = html_entity_decode( get_the_title( $show_id ), ENT_QUOTES, 'UTF-8' );
 
         wp_remote_post( $webhook_url, [
             'body'    => wp_json_encode( [
