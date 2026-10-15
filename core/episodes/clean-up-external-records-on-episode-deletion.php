@@ -8,7 +8,8 @@ add_action( 'benecaster_episode_deleted', function ( int $episode_id, int $show_
 
     my_slack_notify( sprintf(
         'Episode deleted: %s (show %d) — audio: %s',
-        get_the_title( $episode_id ),
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ),
         $show_id,
         $audio_url ?: 'none'
     ) );
