@@ -16,7 +16,8 @@ public function onEpisodePublished( int $episode_id, int $show_id ): void {
 
     $post_url = $this->client->createPost(
         $space_id,
-        get_the_title( $episode_id ),
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ),
         get_post_meta( $episode_id, '_benecaster_description_rss', true )
     );
 
