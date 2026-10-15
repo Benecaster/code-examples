@@ -26,7 +26,8 @@ class MyPlatform implements \Benecaster\Community\CommunityPlatformInterface {
 
     public function onEpisodePublished( int $episode_id, int $show_id ): void {
         if ( ! $this->isConfigured() ) { return; }
-        my_platform_api_post_announcement( get_the_title( $episode_id ) );
+        // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
+        my_platform_api_post_announcement( html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ) );
     }
 }
 
