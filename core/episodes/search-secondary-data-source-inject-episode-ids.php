@@ -3,8 +3,14 @@
 
 add_filter(
     'benecaster_search_supplemental_episode_ids',
-    function ( array $ids, string $term, int $show_id, array $tiers ): array {
+    function ( array $ids, string $term, int $show_id, array $tiers, array $holdings = [], int $user_id = 0 ): array {
         global $wpdb;
+
+        // A transcript sold as the 'transcripts' buy-up is searchable only by its holders.
+        // $holdings is what Benecaster resolved; $tiers is what the SQL filters by, which a filter may have narrowed.
+        if ( ! in_array( 'transcripts', $holdings, true ) ) {
+            return $ids;
+        }
 
         $table = $wpdb->prefix . 'my_addon_transcripts';
         if ( ! $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
@@ -28,5 +34,5 @@ add_filter(
 
         return array_merge( $ids, array_map( 'intval', $rows ) );
     },
-    10, 4
+    10, 6
 );
