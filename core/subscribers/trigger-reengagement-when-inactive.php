@@ -18,7 +18,9 @@ add_action(
     4
 );
 
-// Optional: extend the threshold to 60 days for a monthly show.
+// Optional: a monthly show needs a longer threshold. Set it in Show Settings →
+// Subscription → Feed inactivity threshold; the filter is for a rule the field
+// cannot express, and runs on top of that value.
 add_filter(
     'benecaster_subscriber_engagement_threshold',
     function ( int $days, int $show_id ): int {
