@@ -1,11 +1,22 @@
 <?php
 // Sync email opt-outs to Mailchimp
 
-add_action( 'benecaster_email_unsubscribed', function ( int $user_id, int $show_id, string $type ): void {
+const MY_MIRRORED_LEVELS = [ 'broadcast', 'all' ];
+
+add_action( 'benecaster_email_unsubscribed', function ( ?int $user_id, int $show_id, string $type ): void {
+    // $user_id is null for a one-click unsubscribe by someone not logged in.
+    if ( null === $user_id || ! in_array( $type, MY_MIRRORED_LEVELS, true ) ) {
+        return;
+    }
     my_mailchimp_update_status( $user_id, 'unsubscribed' );
 }, 10, 3 );
 
-add_action( 'benecaster_email_resubscribed', function ( int $user_id, int $show_id, string $type ): void {
+add_action( 'benecaster_email_resubscribed', function ( ?int $user_id, int $show_id, string $type ): void {
+    if ( null === $user_id || ! in_array( $type, MY_MIRRORED_LEVELS, true ) ) {
+        return;
+    }
+    // A listener opted out at both levels who clears one is still opted out at the other.
+    // If that matters for your list, track both levels from these two hooks first.
     my_mailchimp_update_status( $user_id, 'subscribed' );
 }, 10, 3 );
 
