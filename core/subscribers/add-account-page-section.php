@@ -1,8 +1,8 @@
 <?php
-// Add a Custom Section below the QR Code on the Subscriber Account Page
+// Add a Custom Section at the End of a Subscription Card on the Subscriber Account Page
 
 add_action(
-    'benecaster_after_account_qr_code',
+    'benecaster_after_account_email_preferences',
     function ( int $show_id, int $user_id ): void {
         $history_url = add_query_arg(
             [ 'show' => $show_id, 'subscriber' => $user_id ],
