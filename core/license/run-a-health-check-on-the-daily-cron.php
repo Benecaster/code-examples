@@ -1,11 +1,11 @@
 <?php
-// Run a health check on the daily license cron in addition to the once-per-admin-session sweep
+// Run a health check on the daily license cron in addition to the hourly admin sweep
 
 add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): void {
     $notices = $container->make( NoticeManager::class );
     $check   = new StripeWebhookHealthCheck( $notices );
 
-    // Admin-pageload sweep (transient-gated, once per session).
+    // Admin sweep (transient-gated, at most once an hour).
     $notices->add_health_check( $check );
 
     // Daily cron sweep — also runs the check on a fixed cadence so the
