@@ -24,8 +24,19 @@ $placeholders = implode( ', ', array_fill( 0, count( $exempt ), '%s' ) );
 
 // LEFT JOIN BOTH tier tables. A show uses one or the other, so an INNER JOIN
 // to either one silently drops every token belonging to the other kind.
-$joins = "LEFT JOIN {$tier_map} tm
-              ON tm.show_id = t.show_id AND tm.internal_tier_slug = t.tier_slug
+// The tier map is collapsed to one row per slug first, from the show's
+// active plugin only, or a member is counted once per matching row.
+$joins = "LEFT JOIN (
+              SELECT m.show_id, m.internal_tier_slug, MIN(m.id) AS id,
+                     MIN(m.is_free_tier) AS is_free_tier
+              FROM {$tier_map} m
+              WHERE m.plugin_slug IS NULL
+                 OR COALESCE( ( SELECT ab.meta_value FROM {$wpdb->postmeta} ab
+                                WHERE ab.post_id = m.show_id
+                                  AND ab.meta_key = '_benecaster_show_active_bridge'
+                                ORDER BY ab.meta_id ASC LIMIT 1 ), '' ) IN ( '', m.plugin_slug )
+              GROUP BY m.show_id, m.internal_tier_slug
+          ) tm ON tm.show_id = t.show_id AND tm.internal_tier_slug = t.tier_slug
           LEFT JOIN {$mem_tiers} mt
               ON mt.show_id = t.show_id AND mt.tier_slug = t.tier_slug";
 
@@ -54,5 +65,5 @@ $site_count = (int) $wpdb->get_var( $wpdb->prepare(
 ) );
 
 // Outside PHP (a SQL client, a reporting tool): write the deny list
-// literally, keep both LEFT JOINs, and re-check it whenever Benecaster
+// literally, keep both LEFT JOINs and the collapsed tier map, and re-check it whenever Benecaster
 // updates: t.token_type NOT IN ('follower', 'purchaser')
