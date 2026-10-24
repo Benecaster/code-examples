@@ -13,8 +13,8 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
 
     public function get_user_tier( int $user_id, int $show_id ): ?string {
         foreach ( my_plugin_get_active_levels( $user_id ) as $level_id ) {
-            $tier = $this->tier_map->find_by_external( 'my-plugin', (string) $level_id );
-            if ( $tier && (int) $tier->show_id === $show_id ) {
+            $tier = $this->tier_map->find_by_show_and_external( $show_id, 'my-plugin', (string) $level_id );
+            if ( $tier ) {
                 return $tier->internal_tier_slug;
             }
         }
@@ -26,8 +26,8 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
     public function get_all_user_tiers( int $user_id, int $show_id ): array {
         $slugs = [];
         foreach ( my_plugin_get_active_levels( $user_id ) as $level_id ) {
-            $tier = $this->tier_map->find_by_external( 'my-plugin', (string) $level_id );
-            if ( $tier && (int) $tier->show_id === $show_id ) {
+            $tier = $this->tier_map->find_by_show_and_external( $show_id, 'my-plugin', (string) $level_id );
+            if ( $tier ) {
                 $slugs[] = $tier->internal_tier_slug;
             }
         }
@@ -50,8 +50,8 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
 
     public function on_subscription_activated( callable $callback ): void {
         add_action( 'my_plugin_member_activated', function ( $user_id, $level_id ) use ( $callback ): void {
-            $tier = $this->tier_map->find_by_external( 'my-plugin', (string) $level_id );
-            if ( $tier ) {
+            // Every show the level is mapped on - a level can serve several.
+            foreach ( $this->tier_map->find_all_by_external( 'my-plugin', (string) $level_id ) as $tier ) {
                 // user_id, show_id, tier_slug, reason - four arguments.
                 $callback( (int) $user_id, (int) $tier->show_id, $tier->internal_tier_slug, 'new' );
             }
@@ -60,8 +60,7 @@ class MyPlugin_Bridge implements \Benecaster\Bridge\BridgeInterface {
 
     public function on_subscription_cancelled( callable $callback ): void {
         add_action( 'my_plugin_member_cancelled', function ( $user_id, $level_id ) use ( $callback ): void {
-            $tier = $this->tier_map->find_by_external( 'my-plugin', (string) $level_id );
-            if ( $tier ) {
+            foreach ( $this->tier_map->find_all_by_external( 'my-plugin', (string) $level_id ) as $tier ) {
                 // user_id, show_id, reason - three arguments.
                 // 'my-plugin' has no separate lapse event here, so every cancellation
                 // reports 'cancelled'. A plugin that CAN tell a lapse (a fixed term ran
