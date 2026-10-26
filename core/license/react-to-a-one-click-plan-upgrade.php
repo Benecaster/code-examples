@@ -13,7 +13,7 @@ add_action( 'benecaster_license_plan_upgraded', function ( string $old_plan, str
 // downgrade, or a server-side correction — not just the one-click flow.
 add_action( 'benecaster_license_plan_changed', function ( string $from, string $to ): void {
     if ( '' === $to ) {
-        // Licence went invalid or its site token was revoked.
+        // License went invalid or the show's token was revoked.
         my_addon_clear_cached_capabilities();
         return;
     }
