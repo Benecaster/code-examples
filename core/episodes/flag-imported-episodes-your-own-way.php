@@ -8,8 +8,8 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): vo
     foreach ( $rows as $row ) {
         // $row['source'] is 'rss', 'ssp' or 'powerpress'.
         // Every optional field is '' when unset, never absent.
-        if ( '' === $row['audio_url'] ) {
-            error_log( "No audio: {$row['title']} ({$row['edit_url']})" );
+        if ( '' === $row['audio_url'] && '' === $row['video_url'] ) {
+            error_log( "No media file: {$row['title']} ({$row['edit_url']})" );
         }
     }
 } );
