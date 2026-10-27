@@ -1,14 +1,25 @@
 <?php
 // Add transcript metadata from a transcription service
 
-add_filter( 'benecaster_podcast_transcripts', function ( array $transcripts, int $episode_id ) {
+add_filter( 'benecaster_feed_podcast_episode_tags', function ( array $tags, int $episode_id, int $show_id ): array {
     $srt_url = get_post_meta( $episode_id, '_my_transcript_srt', true );
     $vtt_url = get_post_meta( $episode_id, '_my_transcript_vtt', true );
+    if ( ! $srt_url && ! $vtt_url ) {
+        return $tags;
+    }
+
+    // Benecaster pre-fills one entry from the episode's Transcript field. Make it a list
+    // before adding to it: appending to a single entry is read as that one entry.
+    $current = $tags['transcript'] ?? [];
+    $list    = isset( $current['url'] ) ? [ $current ] : (array) $current;
+
     if ( $srt_url ) {
-        $transcripts[] = [ 'url' => $srt_url, 'type' => 'application/srt', 'language' => 'en' ];
+        $list[] = [ 'url' => $srt_url, 'type' => 'application/srt', 'language' => 'en' ];
     }
     if ( $vtt_url ) {
-        $transcripts[] = [ 'url' => $vtt_url, 'type' => 'text/vtt', 'language' => 'en' ];
+        $list[] = [ 'url' => $vtt_url, 'type' => 'text/vtt', 'language' => 'en' ];
     }
-    return $transcripts;
-}, 10, 2 );
+
+    $tags['transcript'] = $list;
+    return $tags;
+}, 10, 3 );
