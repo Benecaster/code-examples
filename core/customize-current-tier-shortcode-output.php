@@ -11,7 +11,7 @@ add_filter(
             /* translators: 1: first name, 2: tier display name */
             __( 'Welcome back, %1$s — your current tier is %2$s.', 'my-addon' ),
             esc_html( $user->display_name ),
-            esc_html( $output )
+            $output // already escaped by the shortcode
         );
     },
     10,
