@@ -19,14 +19,22 @@ add_filter( 'benecaster_member_thanks_query_types', function ( array $types ): a
             // my_addon_donations is the add-on's own mirror of donation activity,
             // written from benecaster_listener_support_donation_logged. Mirror what
             // you need rather than reading Benecaster's tables directly.
+            // Only members who chose to be listed publicly may be named. Benecaster
+            // drops everyone else from your result, so filter here too, or a
+            // list asked for five comes back with fewer.
             $user_ids = $wpdb->get_col( $wpdb->prepare(
                 "SELECT d.user_id
                  FROM {$wpdb->prefix}my_addon_donations d
+                 INNER JOIN {$wpdb->usermeta} listed
+                   ON listed.user_id = d.user_id
+                  AND listed.meta_key = %s
+                  AND listed.meta_value = '1'
                  WHERE d.show_id = %d
                    AND d.donated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
                  GROUP BY d.user_id
                  ORDER BY SUM(d.amount) DESC
                  LIMIT %d",
+                \Benecaster\SupporterWall\SupporterWallManager::META_KEY_SUBSCRIBER_VISIBLE,
                 $show_id,
                 $count > 0 ? $count : PHP_INT_MAX
             ) );
