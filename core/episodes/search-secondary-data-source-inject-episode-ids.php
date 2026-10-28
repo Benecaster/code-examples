@@ -6,27 +6,25 @@ add_filter(
     function ( array $ids, string $term, int $show_id, array $tiers, array $holdings = [], int $user_id = 0 ): array {
         global $wpdb;
 
-        // A transcript sold as the 'transcripts' buy-up is searchable only by its holders.
-        // $holdings is what Benecaster resolved; $tiers is what the SQL filters by, which a filter may have narrowed.
-        if ( ! in_array( 'transcripts', $holdings, true ) ) {
-            return $ids;
-        }
-
-        $table = $wpdb->prefix . 'my_addon_transcripts';
+        // Your add-on's own table, which is yours to change and safe to rely on.
+        $table = $wpdb->prefix . 'my_addon_guest_notes';
         if ( ! $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
             return $ids;
         }
 
-        $like = '%' . $wpdb->esc_like( $term ) . '%';
+        // Members-only notes are searchable only by holders of your buy-up. 'guest-notes' stands in
+        // for the slug benecaster_get_buyup_slug() gives your buy-up on this show.
+        // $holdings is what Benecaster resolved; $tiers is what the SQL filters by, which a filter may have narrowed.
+        $public_only = in_array( 'guest-notes', $holdings, true ) ? '' : 'AND is_public = 1';
 
-        // Exclude visibility='hidden' to prevent unpublished content leaking via search.
+        $like = '%' . $wpdb->esc_like( $term ) . '%';
         $rows = $wpdb->get_col(
             $wpdb->prepare(
                 "SELECT DISTINCT episode_id
                  FROM {$table}
                  WHERE show_id = %d
-                   AND plain_text LIKE %s
-                   AND visibility != 'hidden'",
+                   AND notes LIKE %s
+                   {$public_only}",
                 $show_id,
                 $like
             )
