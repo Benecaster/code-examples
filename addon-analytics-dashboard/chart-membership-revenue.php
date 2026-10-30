@@ -9,7 +9,10 @@ function my_monthly_membership_revenue( int $show_id ): array {
     foreach ( $rows as $row ) {
         $month    = substr( $row['paid_at'], 0, 7 );          // UTC month
         $currency = $row['currency'];                        // never sum across currencies
-        $net      = $row['amount_paid'] - $row['amount_tax'] - $row['amount_refunded'];
+        $paid     = (int) $row['amount_paid'];
+        // amount_refunded includes the tax, so a full refund nets 0: keep the share not refunded.
+        $kept     = $paid > 0 ? ( $paid - $row['amount_refunded'] ) / $paid : 0;
+        $net      = ( $paid - $row['amount_tax'] ) * $kept;
         $months[ $currency ][ $month ] = ( $months[ $currency ][ $month ] ?? 0 ) + $net; // minor units
     }
     return [
