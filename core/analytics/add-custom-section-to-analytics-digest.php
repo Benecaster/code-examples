@@ -1,52 +1,35 @@
 <?php
 // Add a Custom Section to the Analytics Digest
 
-add_filter(
-    'benecaster_analytics_digest_data',
-    function ( array $data, string $type, int $show_id, array $period ): array {
-        if ( ! benecaster_addon_is_active( 'listener-support', $show_id ) ) {
-            return $data;
-        }
-        global $wpdb;
-
-        // my_addon_donations is the add-on's own mirror, written from
-        // benecaster_listener_support_donation_logged.
-        $total = (float) $wpdb->get_var( $wpdb->prepare(
-            "SELECT COALESCE( SUM( amount ), 0 )
-               FROM {$wpdb->prefix}my_addon_donations
-              WHERE show_id = %d AND donated_at BETWEEN %s AND %s",
-            $show_id,
-            $period['start'] . ' 00:00:00',
-            $period['end'] . ' 23:59:59'
-        ) );
-        $data['listener_support_totals'] = [
-            'amount'   => $total,
-            'currency' => 'USD',
-        ];
+add_filter( 'benecaster_analytics_digest_data_weekly', function ( array $data, int $show_id, array $period ): array {
+    if ( ! benecaster_addon_is_active( 'benecaster-addon-analytics-dashboard', $show_id ) ) {
         return $data;
-    },
-    10,
-    4
-);
+    }
+    $data['my_addon_donations'] = benecaster_get_listener_support_donations(
+        $show_id,
+        [ 'date_from' => $period['start'], 'date_to' => $period['end'] ] // Inclusive UTC days, as the reader takes them.
+    );
+    return $data;
+}, 10, 3 );
 
-add_filter(
-    'benecaster_analytics_digest_sections',
-    function ( array $sections, string $type, int $show_id, array $data ): array {
-        if ( ! benecaster_addon_is_active( 'listener-support', $show_id ) ) {
-            return $sections;
+add_filter( 'benecaster_analytics_digest_sections_weekly', function ( array $sections, int $show_id, array $data ): array {
+    $rows = $data['my_addon_donations'] ?? [];
+    if ( [] === $rows ) {
+        return $sections; // Nothing to say: add nothing, so a quiet week stays unsent.
+    }
+    $by_currency = [];
+    foreach ( $rows as $row ) {
+        if ( null !== $row['amount_donated'] && null !== $row['currency'] ) {
+            $by_currency[ $row['currency'] ] = ( $by_currency[ $row['currency'] ] ?? 0 ) + (int) $row['amount_donated'];
         }
-        $totals = $data['listener_support_totals'] ?? null;
-        if ( ! is_array( $totals ) || ( (float) $totals['amount'] ) <= 0.0 ) {
-            return $sections; // Skip the section when there is nothing to report.
-        }
-        $sections[] = [
-            'id'       => 'listener_support_totals',
-            'title'    => esc_html__( 'Listener support', 'benecaster' ),
-            'data'     => $totals,
-            'template' => plugin_dir_path( __FILE__ ) . 'templates/digest-listener-support.php',
-        ];
-        return $sections;
-    },
-    10,
-    4
-);
+    }
+    $lines = [ sprintf( _n( '%s donation this week.', '%s donations this week.', count( $rows ), 'my-addon' ), number_format_i18n( count( $rows ) ) ) ];
+    foreach ( $by_currency as $currency => $minor ) {
+        $lines[] = sprintf( '%s %s', $currency, number_format_i18n(
+            \Benecaster\Membership\RevenueLedgerRepository::to_major_units( $minor, $currency ),
+            \Benecaster\Membership\RevenueLedgerRepository::decimals_for( $currency )
+        ) );
+    }
+    $sections[] = [ 'id' => 'my_addon_donations', 'title' => __( 'Listener support', 'my-addon' ), 'lines' => $lines ];
+    return $sections;
+}, 10, 3 );
