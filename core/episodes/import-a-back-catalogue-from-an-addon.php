@@ -17,7 +17,7 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): vo
             wp_die( 'Choose a show and a feed URL.' );
         }
 
-        // One job per show at a time: there is no lock.
+        // One job per show at a time: core does not refuse a start for a different feed.
         $active = $importer->get_active_job_id( $show_id );
         if ( '' !== $active && 'running' === ( $importer->get_progress( $active )['status'] ?? '' ) ) {
             wp_die( 'An import is already running for this show.' );
