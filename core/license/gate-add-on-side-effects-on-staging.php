@@ -4,8 +4,7 @@
 add_action(
     'benecaster_subscription_activated',
     function ( int $user_id, int $show_id, string $tier_slug, string $source ): void {
-        $staging = \Benecaster\Plugin::instance()->container()->make( \Benecaster\Staging\StagingManager::class );
-        if ( $staging->is_staging() ) {
+        if ( ! benecaster_is_production_site() ) {
             return; // Don't push test subscribers to the production CRM.
         }
         my_crm_tag_contact( get_userdata( $user_id )->user_email, [
