@@ -3,12 +3,11 @@
 
 use Benecaster\Staging\EnvironmentDeclaration;
 use Benecaster\Staging\EnvironmentResolver;
-use Benecaster\Staging\StagingManager;
 
 add_action( 'benecaster_boot', function ( \Benecaster\Container $container ): void {
     // The ordinary question: should my add-on hold back from doing
     // anything that touches real customers on this install?
-    if ( $container->make( StagingManager::class )->is_staging() ) {
+    if ( ! benecaster_is_production_site() ) {
         add_filter( 'my_addon_send_real_emails', '__return_false' );
     }
 
