@@ -43,6 +43,12 @@ function my_addon_import_with_tenure( TokenManager $manager, array $rows, int $s
             $row['join_date']   // already validated above
         );
 
+        // Null: this person already holds a token on the show. Nothing was
+        // written, nothing fired, and their existing feed URL stands.
+        if ( null === $token ) {
+            continue;
+        }
+
         my_addon_email_feed_url( $row['user_id'], $token );
         $imported++;
     }
