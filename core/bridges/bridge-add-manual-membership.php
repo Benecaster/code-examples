@@ -20,29 +20,36 @@ class AcmeMembershipBridge implements \Benecaster\Bridge\BridgeInterface {
         $sub_repo = \Benecaster\Plugin::instance()->make(
             \Benecaster\Membership\SubscriptionRepository::class
         );
-        $sub_id = $sub_repo->create( [
-            'user_id'   => $user_id,
-            'show_id'   => $show_id,
-            'tier_slug' => $tier_slug,
-            'status'    => 'active',
-            'source'    => 'manual',
+        $sub_id = $sub_repo->insert( [
+            'user_id'          => $user_id,
+            'show_id'          => $show_id,
+            'tier_slug'        => $tier_slug,
+            'billing_interval' => 'monthly',
+            'status'           => 'active',
         ] );
 
-        // Generate a Benecaster feed token for the subscriber.
+        // Mint a Benecaster feed token for the subscriber. generate() returns the
+        // plaintext token, or null when they already hold one on this show (their
+        // existing feed URL stands); either way, read the row back below.
         $token_manager = \Benecaster\Plugin::instance()->make(
             \Benecaster\Token\TokenManager::class
         );
-        $token = $token_manager->generate( $user_id, $show_id, $tier_slug );
+        $token_manager->generate( $user_id, $show_id, $tier_slug );
 
-        // Stamp is_manual_grant and optional expiry on the token row.
         $token_repo = \Benecaster\Plugin::instance()->make(
             \Benecaster\Token\TokenRepository::class
         );
-        $token_repo->set_manual_grant( $token->id, true, $expiry_at );
+        $token_row = $token_repo->find_by_user_and_show( $user_id, $show_id );
+        if ( null === $token_row ) {
+            throw new \RuntimeException( 'Subscription was created but no token was minted.' );
+        }
+
+        // Stamp is_manual_grant and optional expiry on the token row.
+        $token_repo->set_manual_grant( (int) $token_row->id, true, $expiry_at );
 
         return [
             'subscription_id' => $sub_id,
-            'token_prefix'    => substr( $token->hash, 0, 8 ),
+            'token_prefix'    => (string) $token_row->token_prefix,
         ];
     }
 }
