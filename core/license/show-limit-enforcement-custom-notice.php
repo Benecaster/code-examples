@@ -26,6 +26,12 @@ add_action( 'admin_notices', function (): void {
     if ( ! is_array( $state ) ) {
         return;
     }
+    // Disconnecting a switched-off show clears its flag without firing
+    // the recovered action, so check the live set before rendering.
+    if ( [] === benecaster_get_over_limit_show_ids() ) {
+        delete_option( 'my_theme_show_limit_alert' );
+        return;
+    }
     $active = (int) ( $state['active_show_count'] ?? 0 );
     $limit  = $state['show_limit'];
 
