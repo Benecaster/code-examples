@@ -23,7 +23,7 @@ add_action( 'wp_dashboard_setup', function (): void {
             if ( null === $balance ) {
                 printf(
                     '<p><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
-                    esc_url( \Benecaster\License\LicenseManager::REFERRAL_DASHBOARD_URL ),
+                    esc_url( \Benecaster\License\LicenseManager::referral_dashboard_url() ),
                     esc_html__( 'See your current referral credit on benecaster.com', 'my-addon' )
                 );
             } elseif ( $balance > 0 ) {
