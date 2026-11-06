@@ -6,5 +6,5 @@ add_action( 'benecaster_boot', function ( \Benecaster\Container $container ) {
     benecaster_register_field_cpt( 'benecaster_guest', __( 'Guest', 'benecaster-guest-manager' ) );
 } );
 
-// React — fetch and save field values in a guest editor panel
-// (see recipe page for full TSX example using useFieldValues / useSaveFieldValues)
+// React — fetch and save field values in your own editor: see the TSX example above, which
+// uses window.BenecasterExtensions.useFieldValues and useSaveFieldValues inside a fill.
