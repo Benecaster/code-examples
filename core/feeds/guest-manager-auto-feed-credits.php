@@ -1,5 +1,5 @@
 <?php
-// Auto-populate Feed Credits from Guest Manager
+// Add Feed Credits from Your Own Add-on
 
 add_filter(
     'benecaster_podcast2_episode_auto_feed_credits',
@@ -15,7 +15,7 @@ add_filter(
                 'name'       => $post->post_title,
                 'url'        => (string) get_post_meta( $post->ID, 'website', true ),
                 'image'      => (string) get_post_meta( $post->ID, 'photo_url', true ),
-                'source'     => 'Guest Manager',
+                'source'     => 'My Add-on',
                 'source_url' => admin_url( 'post.php?post=' . $post->ID . '&action=edit' ),
             ];
         }
