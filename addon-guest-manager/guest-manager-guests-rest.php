@@ -12,10 +12,11 @@ add_action( 'benecaster_guest_manager_after_delete_guest', function ( int $guest
 // Create a guest from a booking form, then give them a photo already in the media library.
 $request = new WP_REST_Request( 'POST', '/benecaster-guest-manager/v1/guests' );
 $request->set_body_params( [
-    'name'    => 'Alice Smith',
-    'title'   => 'Founder, Acme Labs',
-    'website' => 'https://alice.example',
-    'social'  => [ [ 'platform' => 'LinkedIn', 'url' => 'https://linkedin.example/in/alice' ] ],
+    'name'         => 'Alice Smith',
+    'title'        => 'Founder',
+    'organization' => 'Acme Labs',
+    'website'      => 'https://alice.example',
+    'social'       => [ [ 'platform' => 'LinkedIn', 'url' => 'https://linkedin.example/in/alice' ] ],
 ] );
 $guest = rest_do_request( $request )->get_data();
 
