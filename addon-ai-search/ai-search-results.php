@@ -15,3 +15,9 @@ add_filter( 'benecaster_ai_search_rate_limit', fn( int $per_minute ): int => is_
 
 // A flagship show gets a higher daily limit on paid searches than the others.
 add_filter( 'benecaster_ai_search_daily_cap', fn( int $cap, int $show_id ): int => 12 === $show_id ? 2000 : $cap, 10, 2 );
+
+// AI Search for signed-in visitors on show 12 only, whatever Settings → AI Search says.
+add_filter( 'benecaster_ai_search_signed_in_only', fn( bool $on, int $show_id ): bool => 12 === $show_id ? true : $on, 10, 2 );
+
+// Invite signed-out visitors to sign in, under the keyword search they get instead.
+add_filter( 'benecaster_ai_search_signed_out_output', fn( string $html ): string => $html . '<p><a href="' . esc_url( wp_login_url( get_permalink() ) ) . '">Sign in</a> to search by topic.</p>' );
