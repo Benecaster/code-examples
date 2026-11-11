@@ -13,6 +13,12 @@ function my_addon_speaker_name( array $mapped, int $episode_id ): string {
     return null !== $guest ? $guest['name'] : (string) $mapped['name'];
 }
 
+// A search result linking to the guest's record, for administrators only.
+$guest = benecaster_guest_manager_get_guest( 42 );
+if ( null !== $guest && '' !== $guest['edit_url'] && current_user_can( 'manage_options' ) ) {
+    printf( '<a href="%s">%s</a>', esc_url( $guest['edit_url'] ), esc_html( $guest['name'] ) );
+}
+
 // Offer the episode's own guests first in a mapping list, then search the roster
 // with GET /wp-json/benecaster-guest-manager/v1/guests?search=… (recipe guest-manager-guests-rest, manage_options).
 $suggested = function_exists( 'benecaster_guest_manager_get_episode_guests' )
