@@ -1,9 +1,17 @@
 <?php
 // Register an add-on CPT with the custom field system
 
-// PHP — register the CPT at add-on boot
+// PHP — register the CPT from the gated boot, on init
 add_action( 'benecaster_boot', function ( \Benecaster\Container $container ) {
-    benecaster_register_field_cpt( 'benecaster_guest', __( 'Guest', 'benecaster-guest-manager' ) );
+    benecaster_register_addon(
+        'benecaster-addon-guest-manager',
+        static function ( \Benecaster\Container $container ): void {
+            // Runs only while the add-on is switched on for at least one show.
+            add_action( 'init', static function (): void {
+                benecaster_register_field_cpt( 'benecaster_guest', __( 'Guest', 'benecaster-guest-manager' ) );
+            } );
+        }
+    );
 } );
 
 // React — fetch and save field values in your own editor: see the TSX example above, which
