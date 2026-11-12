@@ -5,6 +5,9 @@ add_filter( 'benecaster_player_output', function ( string $html, int $episode_id
     if ( ! str_contains( $html, 'benecaster-player--video' ) ) {
         return $html; // Audio player — leave it alone.
     }
+    if ( str_contains( $html, 'benecaster-preview-video' ) ) {
+        return $html; // A locked visitor's preview — never swap in the full video.
+    }
     $show_id = (int) wp_get_post_parent_id( $episode_id );
     $url     = (string) apply_filters(
         'benecaster_episode_video_url',
