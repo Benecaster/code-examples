@@ -6,6 +6,10 @@ $request = new WP_REST_Request( 'PATCH', '/benecaster-guest-manager/v1/settings'
 $request->set_body_params( [ 'directory' => true ] );
 rest_do_request( $request );
 
+// Or give each show with Guest Manager on a directory of its own as well.
+$request->set_body_params( [ 'directory_mode' => 'per_show' ] );
+rest_do_request( $request );
+
 // Put guests with a photo first on each page, keeping A–Z within each group.
 add_filter( 'benecaster_guest_manager_guest_directory_data', static function ( array $directory ): array {
     usort( $directory['guests'], static fn( array $a, array $b ): int => ( '' === $a['photo_url'] ) <=> ( '' === $b['photo_url'] ) ?: strcasecmp( $a['name'], $b['name'] ) );
