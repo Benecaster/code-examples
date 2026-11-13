@@ -3,18 +3,17 @@
 
 // Circle's built-in onEpisodePublished() — canonical example.
 public function onEpisodePublished( int $episode_id, int $show_id ): void {
-    if ( ! $this->isConfigured() ) { return; }
+    // 'default' → follow the show's setting, 'create' → always, 'skip' → never.
+    $mode       = get_post_meta( $episode_id, '_benecaster_circle_discussion_mode', true ) ?: 'default';
+    $show_wants = (bool) get_post_meta( $show_id, '_benecaster_circle_auto_discussion', true );
 
-    $mode     = get_post_meta( $episode_id, '_benecaster_circle_discussion_mode', true ) ?: 'default';
-    $globally = (bool) get_option( 'benecaster_circle_auto_discussion' );
-
-    if ( $mode === 'skip' || ( $mode === 'default' && ! $globally ) ) { return; }
+    if ( $mode === 'skip' || ( $mode === 'default' && ! $show_wants ) ) { return; }
 
     $space_id = get_post_meta( $episode_id, '_benecaster_circle_discussion_space', true )
-                ?: get_option( 'benecaster_circle_episode_discussion_space' );
+                ?: get_post_meta( $show_id, '_benecaster_circle_discussion_space', true );
     if ( ! $space_id ) { return; }
 
-    $post_url = $this->client->createPost(
+    $post_url = $this->client( $show_id )->createPost( // the show's own Circle credentials
         $space_id,
         // get_the_title() returns HTML (Dave&#8217;s Q&#038;A); this is plain text.
         html_entity_decode( get_the_title( $episode_id ), ENT_QUOTES, 'UTF-8' ),
